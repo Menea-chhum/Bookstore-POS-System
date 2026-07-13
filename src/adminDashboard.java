@@ -17,6 +17,17 @@ public class adminDashboard {
     private JTextField bookSearchField;
     private JComboBox categoryFilterCombo;
     private JTable booksTable;
+    private JPanel categoriesPanel;
+    private JPanel categoryTopPanel;
+    private JButton addCategoryButton;
+    private JTextField categorySearchField;
+    private JPanel categoryGridPanel;
+    private JPanel selfHelpCard;
+    private JLabel selfHelpNameLabel;
+    private JLabel selfHelpDescLabel;
+    private JLabel selfHelpCountLabel;
+    private JButton editSelfHelpBtn;
+    private JButton deleteSelfHelpBtn;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
