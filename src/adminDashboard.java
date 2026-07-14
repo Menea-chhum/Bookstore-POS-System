@@ -28,6 +28,7 @@ public class adminDashboard {
     private JLabel selfHelpCountLabel;
     private JButton editSelfHelpBtn;
     private JButton deleteSelfHelpBtn;
+    private JPanel technologyCard;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
