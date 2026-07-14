@@ -480,7 +480,11 @@
                             <properties>
                               <columns value="140"/>
                               <foreground color="-8875608"/>
+<<<<<<< HEAD
                               <preferredSize width="1546" height="32"/>
+=======
+                              <preferredSize width="1268" height="32"/>
+>>>>>>> f159c0cf03a1c97a5d17f9c2e3c81bfdd8ff2948
                               <text value="Seach categories"/>
                             </properties>
                           </component>
@@ -636,6 +640,7 @@
                           </grid>
                         </children>
                       </grid>
+<<<<<<< HEAD
                       <grid id="c2918" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
@@ -643,6 +648,16 @@
                         </constraints>
                         <properties/>
                         <border type="none"/>
+=======
+                      <grid id="c2918" binding="technologyCard" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-1"/>
+                        </properties>
+                        <border type="line"/>
+>>>>>>> f159c0cf03a1c97a5d17f9c2e3c81bfdd8ff2948
                         <children/>
                       </grid>
                       <grid id="5f789" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
