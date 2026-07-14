@@ -671,7 +671,7 @@
                             <constraints border-constraint="Center"/>
                             <properties/>
                             <border type="empty">
-                              <size top="8" left="12" bottom="8" right="0"/>
+                              <size top="8" left="12" bottom="8" right="12"/>
                             </border>
                             <children/>
                           </grid>
