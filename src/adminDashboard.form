@@ -6,7 +6,6 @@
     </constraints>
     <properties>
       <background color="-2299145"/>
-      <enabled value="true"/>
     </properties>
     <border type="none"/>
     <children>
@@ -157,7 +156,7 @@
                                 <properties>
                                   <columns value="120"/>
                                   <foreground color="-8875608"/>
-                                  <preferredSize width="1326" height="32"/>
+                                  <preferredSize width="1088" height="32"/>
                                   <text value="Search book by title or author"/>
                                 </properties>
                               </component>
@@ -481,10 +480,14 @@
                               <columns value="140"/>
                               <foreground color="-8875608"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
                               <preferredSize width="1546" height="32"/>
 =======
                               <preferredSize width="1268" height="32"/>
 >>>>>>> f159c0cf03a1c97a5d17f9c2e3c81bfdd8ff2948
+=======
+                              <preferredSize width="1268" height="32"/>
+>>>>>>> parent of adaf3c9 (work on category tab)
                               <text value="Seach categories"/>
                             </properties>
                           </component>
