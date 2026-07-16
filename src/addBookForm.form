@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="addBookForm">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="20" width="916" height="811"/>
+    </constraints>
+    <properties>
+      <background color="-1773060"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="3bcb9" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="10" bottom="10" right="10"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-1773060"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="767c3" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+              <font size="13"/>
+              <foreground color="-8875608"/>
+              <text value="Fill in each book's details and click &quot;Add to list&quot;. Then click &quot;Save all books&quot; when ready."/>
+            </properties>
+          </component>
+          <hspacer id="6a9ff">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <vspacer id="8288c">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <grid id="ceee5" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="587e3" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1773060"/>
+                  <focusable value="false"/>
+                  <font size="22" style="1"/>
+                  <foreground color="-15388337"/>
+                  <text value="ADD BOOK"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="527b8" layout-manager="GridLayoutManager" row-count="16" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="10" bottom="10" right="10"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="350" height="503"/>
+          </grid>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="9ca9e" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Category"/>
+            </properties>
+          </component>
+          <component id="fb148" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+            </properties>
+          </component>
+          <component id="26f70" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Supplier"/>
+            </properties>
+          </component>
+          <component id="9f3f4" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+            </properties>
+          </component>
+          <component id="af9bc" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Title"/>
+            </properties>
+          </component>
+          <component id="fa4d0" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1050884"/>
+            </properties>
+          </component>
+          <component id="50a67" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Author"/>
+            </properties>
+          </component>
+          <component id="c7d0d" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+            </properties>
+          </component>
+          <component id="da283" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Price ($)"/>
+            </properties>
+          </component>
+          <component id="d3372" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+            </properties>
+          </component>
+          <component id="5c2bb" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Stock quantity"/>
+            </properties>
+          </component>
+          <component id="83ea0" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="64aa9" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="232" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font size="18" style="1"/>
+              <foreground color="-14979144"/>
+              <text value="BOOK DETAILS"/>
+            </properties>
+          </component>
+          <component id="20a93" class="javax.swing.JButton" binding="addToListButton" default-binding="true">
+            <constraints>
+              <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-13926447"/>
+              <font size="13" style="1"/>
+              <foreground color="-1"/>
+              <text value="+ Add to list"/>
+            </properties>
+          </component>
+          <component id="b50e1" class="javax.swing.JLabel" binding="errMsg">
+            <constraints>
+              <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1773060"/>
+              <font size="13" style="1"/>
+              <foreground color="-325109"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <vspacer id="c2d4d">
+            <constraints>
+              <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+      <grid id="80032" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="10" bottom="10" right="10"/>
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-1773060"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="247e0" class="javax.swing.JButton" binding="a️SaveAllBookButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-13926447"/>
+              <font size="13" style="1"/>
+              <foreground color="-1"/>
+              <text value="✔️ Save all book"/>
+            </properties>
+          </component>
+          <component id="b5281" class="javax.swing.JButton" binding="clearAllButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="43"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <font size="15" style="1"/>
+              <text value="Clear all"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="5f923" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="10" bottom="10" right="10"/>
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <vspacer id="3807c">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="f0251" class="javax.swing.JTable" binding="table1" default-binding="true">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+          </component>
+          <component id="d59b" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <font size="18" style="1"/>
+              <foreground color="-13926447"/>
+              <text value="LIST"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
