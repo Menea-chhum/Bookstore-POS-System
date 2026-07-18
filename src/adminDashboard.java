@@ -28,6 +28,10 @@ public class adminDashboard {
     private JLabel selfHelpCountLabel;
     private JButton editSelfHelpBtn;
     private JButton deleteSelfHelpBtn;
+    private JTextField searchSuppliersTextField;
+    private JTable table1;
+    private JButton addSupplierButton;
+    private JTable table2;
 
     private JPanel technologyCard;
 
