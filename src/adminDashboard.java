@@ -32,6 +32,18 @@ public class adminDashboard {
     private JTable table1;
     private JButton addSupplierButton;
     private JTable table2;
+    private JPanel TechnologyCard;
+    private JButton a️Button;
+    private JButton a️Button3;
+    private JButton a️Button1;
+    private JButton a️Button2;
+    private JButton a️Button6;
+    private JButton a️Button7;
+    private JPanel FictionCard;
+    private JPanel horrorCard;
+    private JButton a️Button4;
+    private JButton a️Button5;
+    private JPanel businessCard;
 
     private JPanel technologyCard;
 

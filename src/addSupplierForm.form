@@ -228,7 +228,7 @@
             <properties>
               <font size="22" style="1"/>
               <foreground color="-15388337"/>
-              <text value="ADD CATEGORY"/>
+              <text value="ADD SUPPLIER"/>
             </properties>
           </component>
         </children>
