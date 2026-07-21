@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class adminDashboard {
     private JPanel mainPanel;
@@ -26,8 +27,6 @@ public class adminDashboard {
     private JLabel selfHelpNameLabel;
     private JLabel selfHelpDescLabel;
     private JLabel selfHelpCountLabel;
-    private JButton editSelfHelpBtn;
-    private JButton deleteSelfHelpBtn;
     private JTextField searchSuppliersTextField;
     private JTable table1;
     private JButton addSupplierButton;
@@ -36,19 +35,39 @@ public class adminDashboard {
     private JButton a️Button;
     private JButton a️Button3;
     private JButton a️Button1;
-    private JButton a️Button2;
+    private JButton a️Button8;
     private JButton a️Button6;
-    private JButton a️Button7;
+    private JButton a️Button9;
     private JPanel FictionCard;
     private JPanel horrorCard;
     private JButton a️Button4;
     private JButton a️Button5;
     private JPanel businessCard;
+    private JButton addCategoryButton1;
+    private JPanel addCategoryCard;
+    private JButton a️Button2;
+    private JButton a️Button7;
 
     private JPanel technologyCard;
 
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
+        // Set fixed size for all category cards
+        Dimension cardSize = new Dimension(300, 200);
+
+        selfHelpCard.setPreferredSize(cardSize);
+        selfHelpCard.setMaximumSize(cardSize);
+
+        technologyCard.setPreferredSize(cardSize);
+        technologyCard.setMaximumSize(cardSize);
+
+        businessCard.setPreferredSize(cardSize);
+        businessCard.setMaximumSize(cardSize);
+
+        FictionCard.setPreferredSize(cardSize);
+        FictionCard.setMaximumSize(cardSize);
+
+        horrorCard.setPreferredSize(cardSize);
+        horrorCard.setMaximumSize(cardSize);
     }
 }

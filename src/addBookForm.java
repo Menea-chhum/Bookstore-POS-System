@@ -13,4 +13,5 @@ public class addBookForm {
     private JButton clearAllButton;
     private JLabel errMsg;
     private JTable table1;
+    private JButton deleteButton;
 }
