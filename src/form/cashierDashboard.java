@@ -1,4 +1,4 @@
-package cashier;
+
 
 import javax.swing.*;
 

@@ -1,11 +1,13 @@
-public class Staff {
+package model;
+
+public class staff {
     private  int  staffId;
     private String username;
     private String password;
     private String full_name;
     private String role;
 
-    public Staff(int staffId, String username, String password, String full_name, String role){
+    public staff(int staffId, String username, String password, String full_name, String role){
         this.staffId = staffId;
         this.username = username;
         this.password = password;
