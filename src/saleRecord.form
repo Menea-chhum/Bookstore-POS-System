@@ -280,6 +280,7 @@
                     </children>
                   </grid>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -293,6 +294,8 @@
                     <margin top="10" left="10" bottom="10" right="10"/>
 >>>>>>> 6cdc32dd23e78c4c363ac5f3c27701f52213abb5
 >>>>>>> parent of 67fde53 (revert new sale form and sale record form)
+=======
+>>>>>>> parent of 24ace5f (Update saleRecord.form)
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -350,6 +353,7 @@
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
                         <properties/>
@@ -365,6 +369,8 @@
                         <border type="none"/>
 >>>>>>> parent of 7a1a4fa (Update saleRecord.form)
 >>>>>>> parent of 67fde53 (revert new sale form and sale record form)
+=======
+>>>>>>> parent of 24ace5f (Update saleRecord.form)
                         <children>
                           <component id="ace93" class="javax.swing.JTable" binding="table2" default-binding="true">
                             <constraints/>
