@@ -288,7 +288,7 @@
                                     <properties>
                                       <font size="22" style="1"/>
                                       <foreground color="-15388337"/>
-                                      <text value="5"/>
+                                      <text value=""/>
                                     </properties>
                                   </component>
                                 </children>
@@ -323,7 +323,7 @@
                                     <properties>
                                       <font size="22" style="1"/>
                                       <foreground color="-2987746"/>
-                                      <text value="2"/>
+                                      <text value=""/>
                                     </properties>
                                   </component>
                                 </children>
@@ -357,7 +357,7 @@
                                     <properties>
                                       <font size="22" style="1"/>
                                       <foreground color="-15388337"/>
-                                      <text value="96"/>
+                                      <text value=""/>
                                     </properties>
                                   </component>
                                 </children>
@@ -391,7 +391,7 @@
                                     <properties>
                                       <font size="22" style="1"/>
                                       <foreground color="-15388337"/>
-                                      <text value="5"/>
+                                      <text value=""/>
                                     </properties>
                                   </component>
                                 </children>
