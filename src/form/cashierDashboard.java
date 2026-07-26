@@ -1,4 +1,4 @@
-
+package form;
 
 import javax.swing.*;
 
@@ -8,7 +8,8 @@ public class cashierDashboard {
     private JButton newSaleButton;
     private JButton logOutButton;
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+    public JPanel getMainPanel()
+    {
+        return MainPanel;
     }
 }

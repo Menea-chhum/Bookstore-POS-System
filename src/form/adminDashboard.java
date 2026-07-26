@@ -1,3 +1,5 @@
+package form;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -35,23 +37,27 @@ public class adminDashboard {
     private JPanel technologyCard;
 
 
-    private void createUIComponents() {
-        // Set fixed size for all category cards
-        Dimension cardSize = new Dimension(300, 200);
+//    private void createUIComponents() {
+//        // Set fixed size for all category cards
+//        Dimension cardSize = new Dimension(300, 200);
+//
+//        selfHelpCard.setPreferredSize(cardSize);
+//        selfHelpCard.setMaximumSize(cardSize);
+//
+//        technologyCard.setPreferredSize(cardSize);
+//        technologyCard.setMaximumSize(cardSize);
+//
+//        businessCard.setPreferredSize(cardSize);
+//        businessCard.setMaximumSize(cardSize);
+//
+//        FictionCard.setPreferredSize(cardSize);
+//        FictionCard.setMaximumSize(cardSize);
+//
+//        horrorCard.setPreferredSize(cardSize);
+//        horrorCard.setMaximumSize(cardSize);
+//    }
 
-        selfHelpCard.setPreferredSize(cardSize);
-        selfHelpCard.setMaximumSize(cardSize);
-
-        technologyCard.setPreferredSize(cardSize);
-        technologyCard.setMaximumSize(cardSize);
-
-        businessCard.setPreferredSize(cardSize);
-        businessCard.setMaximumSize(cardSize);
-
-        FictionCard.setPreferredSize(cardSize);
-        FictionCard.setMaximumSize(cardSize);
-
-        horrorCard.setPreferredSize(cardSize);
-        horrorCard.setMaximumSize(cardSize);
+    public JPanel getMainPanel(){
+        return mainPanel;
     }
 }
