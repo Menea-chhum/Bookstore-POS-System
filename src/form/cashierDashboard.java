@@ -6,7 +6,6 @@ public class cashierDashboard {
     private JPanel MainPanel;
     private JLabel Logo;
     private JButton newSaleButton;
-    private JButton saleRecordsButton;
     private JButton logOutButton;
 
     private void createUIComponents() {
