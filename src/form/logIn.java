@@ -65,11 +65,12 @@ public class logIn {
 
                             } else if (loggedInStaff.getRole().equalsIgnoreCase("Cashier")) {
 
+                                JOptionPane.showMessageDialog(null, "Cashier login successful!");
+
                                 openDashboard(
                                         new cashierDashboard().getMainPanel(),
                                         "Cashier Dashboard"
                                 );
-
                             }
 
                         } else {
