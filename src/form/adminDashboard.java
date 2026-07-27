@@ -2,8 +2,10 @@ package form;
 
 import DAO.bookDAO;
 import DAO.categoryDAO;
+import DAO.supplierDAO;
 import model.book;
 import model.staff;
+import model.supplier;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -68,6 +70,7 @@ public class adminDashboard {
 
         loadDashboardStatistics();
         loadBookTable();
+        loadSupplierTable();
 
         addBookBtn.addActionListener(e -> openAddBookForm());
         updateButton.addActionListener(e ->openUpdateForm());
@@ -249,5 +252,50 @@ private void openUpdateForm() {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private void loadSupplierTable()
+    {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"ID", "Name", "Contact Number", "Email", "Address"}, 0);
+        supplierTable.setModel(model);
+        supplierTable.setRowHeight(35);
+        supplierTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        supplierTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Title
+        supplierTable.getColumnModel().getColumn(2).setPreferredWidth(180); // Author
+        supplierTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // Price
+        supplierTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Quantity
+        supplierTable.getTableHeader().setFont(
+                new Font("Arial", Font.BOLD, 14)
+        );
+
+        supplierTable.getTableHeader().setPreferredSize(
+                new Dimension(0,35)
+        );
+
+        List<supplier> suppliers = supplierDAO.getAllSuppliers();
+        for (supplier s : suppliers) {
+//            model.addRow(new Object[]{
+//                    b.getBookId(), b.getTitle(), b.getAuthor(),
+//                    b.getPrice(), b.getStockQuantity(),
+//                    b.getCategoryId(), b.getSupplierId(), "Edit"
+//            });
+            model.addRow(new Object[]{
+                    s.getSupplierId(),
+                    s.getSupplierName(),
+                    s.getContactNumber(),
+                    s.getEmail(),
+                    s.getAddress()
+            });
+
+        }
+        DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+        center.setHorizontalAlignment(JLabel.CENTER);
+
+        for(int i = 0; i < supplierTable.getColumnCount(); i++){
+            supplierTable.getColumnModel()
+                    .getColumn(i)
+                    .setCellRenderer(center);
+        }
     }
 }
