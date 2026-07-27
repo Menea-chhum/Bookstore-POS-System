@@ -10,7 +10,7 @@ public class supplierDAO {
 
     // Create - Add a new supplier
     public boolean addSupplier(supplier supplier) {
-        String sql = "INSERT INTO suppliers (supplier_name, contact_number, email, address) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO supplier (supplier_name, contact_number, email, address) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -31,9 +31,9 @@ public class supplierDAO {
     }
 
     // Read - Get all suppliers
-    public List<supplier> getAllSuppliers() {
+    public static List<supplier> getAllSuppliers() {
         List<supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT * FROM suppliers ORDER BY supplier_name";
+        String sql = "SELECT * FROM supplier ORDER BY supplier_name";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -58,7 +58,7 @@ public class supplierDAO {
 
     // Read - Get supplier by ID
     public supplier getSupplierById(int supplierId) {
-        String sql = "SELECT * FROM suppliers WHERE supplier_id = ?";
+        String sql = "SELECT * FROM supplier WHERE supplier_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -85,7 +85,7 @@ public class supplierDAO {
     // Read - Search suppliers by name
     public List<supplier> searchSuppliers(String keyword) {
         List<supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT * FROM suppliers WHERE supplier_name LIKE ? ORDER BY supplier_name";
+        String sql = "SELECT * FROM supplier WHERE supplier_name LIKE ? ORDER BY supplier_name";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -110,10 +110,35 @@ public class supplierDAO {
         }
         return suppliers;
     }
+    // Add this method to supplierDAO class
+    public supplier getSupplierByName(String supplierName) {
+        String sql = "SELECT * FROM supplier WHERE supplier_name = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, supplierName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new supplier(
+                        rs.getInt("supplier_id"),
+                        rs.getString("supplier_name"),
+                        rs.getString("contact_number"),
+                        rs.getString("email"),
+                        rs.getString("address")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting supplier by name: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // Update - Update supplier
     public boolean updateSupplier(supplier supplier) {
-        String sql = "UPDATE suppliers SET supplier_name = ?, contact_number = ?, email = ?, address = ? WHERE supplier_id = ?";
+        String sql = "UPDATE supplier SET supplier_name = ?, contact_number = ?, email = ?, address = ? WHERE supplier_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -136,7 +161,7 @@ public class supplierDAO {
 
     // Delete - Delete supplier
     public boolean deleteSupplier(int supplierId) {
-        String sql = "DELETE FROM suppliers WHERE supplier_id = ?";
+        String sql = "DELETE FROM supplier WHERE supplier_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -154,7 +179,7 @@ public class supplierDAO {
 
     // Check if supplier supplies any books
     public boolean hasBooks(int supplierId) {
-        String sql = "SELECT COUNT(*) FROM books WHERE supplier_id = ?";
+        String sql = "SELECT COUNT(*) FROM book WHERE supplier_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -174,7 +199,7 @@ public class supplierDAO {
 
     // Get total number of suppliers
     public int getTotalSuppliers() {
-        String sql = "SELECT COUNT(*) FROM suppliers";
+        String sql = "SELECT COUNT(*) FROM supplier";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -187,6 +212,25 @@ public class supplierDAO {
             System.err.println("Error getting total suppliers: " + e.getMessage());
             e.printStackTrace();
         }
+        return 0;
+    }
+    public int getBookCountBySupplier(int supplierId) {
+        String sql = "SELECT COUNT(*) FROM book WHERE supplier_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, supplierId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return 0;
     }
 }

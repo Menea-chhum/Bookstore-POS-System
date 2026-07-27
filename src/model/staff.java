@@ -14,6 +14,13 @@ public class staff {
         this.full_name = full_name;
         this.role = role;
     }
+
+    public void setStaffId(int staffId) { this.staffId = staffId; }
+    public void setUsername(String username) { this.username = username; }
+    public void setPassword (String password) { this.password = password; }
+    public void setFull_name (String full_name) { this.full_name = full_name; }
+    public void setRole (String role) { this.role = role; }
+
     public int getStaffId() { return staffId; }
     public String getUsername() { return username; }
     public String getPassword () { return password; }

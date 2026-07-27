@@ -18,6 +18,23 @@ public class supplier {
         this.address = address;
     }
 
+    public void setSupplierId(int supplierId){
+        this.supplierId = supplierId;
+    }
+    public void setSupplierName(String supplierName){
+        this.supplierName = supplierName;
+    }
+    public void setContactNumber(String contactNumber){
+        this.contactNumber = contactNumber;
+    }
+    public void setEmail (String email){
+        this.email = email;
+    }
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+
     public int getSupplierId()
     {
         return supplierId;
@@ -37,5 +54,10 @@ public class supplier {
     public String getAddress()
     {
         return address;
+    }
+
+    @Override
+    public String toString() {
+        return supplierName;
     }
 }

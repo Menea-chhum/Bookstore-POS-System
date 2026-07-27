@@ -1,6 +1,7 @@
 package form;
 
 import database.DBConnection;
+import model.staff;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,7 @@ public class logIn {
 
                 if (con != null) {
 
-                    String sql = "SELECT role FROM staff WHERE username = ? AND password = ?";
+                    String sql = "SELECT * FROM staff WHERE username = ? AND password = ?";
 
                     try (PreparedStatement ppst = con.prepareStatement(sql)) {
 
@@ -47,17 +48,22 @@ public class logIn {
                         ResultSet rs = ppst.executeQuery();
 
                         if (rs.next()) {
+                            staff loggedInStaff = new staff(
+                                    rs.getInt("staff_id"),
+                                    rs.getString("username"),
+                                    rs.getString("password"),
+                                    rs.getString("full_name"),
+                                    rs.getString("role")
+                            );
 
-                            String role = rs.getString("role");
-
-                            if (role.equalsIgnoreCase("Admin")) {
+                            if (loggedInStaff.getRole().equalsIgnoreCase("Admin")) {
 
                                 openDashboard(
-                                        new adminDashboard().getMainPanel(),
+                                        new adminDashboard(loggedInStaff).getMainPanel(),
                                         "Admin Dashboard"
                                 );
 
-                            } else if (role.equalsIgnoreCase("Cashier")) {
+                            } else if (loggedInStaff.getRole().equalsIgnoreCase("Cashier")) {
 
                                 openDashboard(
                                         new cashierDashboard().getMainPanel(),

@@ -16,6 +16,29 @@ public class saleDetail {
         this.unitPrice = unitPrice;
     }
 
+    public void setDetailId(int detailId)
+    {
+        this.detailId = detailId;
+    }
+    public void setSaleId(int saleId)
+    {
+        this.saleId = saleId;
+    }
+    public void setBookId(int bookId)
+    {
+
+        this.bookId = bookId;
+    }
+    public void setQuantitySold(int quantitySold)
+    {
+        this.quantitySold = quantitySold;
+    }
+    public void setUnitPrice(double unitPrice)
+    {
+        this.unitPrice = unitPrice;
+    }
+
+
     public int getDetailId()
     {
         return detailId;

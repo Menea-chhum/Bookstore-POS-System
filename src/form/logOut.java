@@ -1,3 +1,5 @@
+package form;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -6,6 +8,10 @@ public class logOut extends JDialog {
     private JButton buttonCancel;
     private JButton buttonLogout;
 
+    public JPanel getContentPane()
+    {
+        return contentPane;
+    }
     public logOut() {
         setContentPane(contentPane);
         setModal(true);
@@ -45,8 +51,8 @@ public class logOut extends JDialog {
     }
 
     private void onLogout() {
-        // add your code here if necessary
         dispose();
+        openLoginForm();
     }
 
     public static void main(String[] args) {
@@ -54,5 +60,17 @@ public class logOut extends JDialog {
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
+    }
+
+    private void openLoginForm(){
+
+        JFrame frame = new JFrame("Log in");
+
+        logIn login = new logIn();
+        frame.setContentPane(login.getMainPanel());
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
 }

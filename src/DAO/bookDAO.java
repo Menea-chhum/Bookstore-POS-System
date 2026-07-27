@@ -10,7 +10,7 @@ public class bookDAO {
 
     // Create - Add a new book
     public boolean addBook(book book) {
-        String sql = "INSERT INTO books (title, author, price, stock_quantity, category_id, supplier_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO book (title, author, price, quantity, category_id, supplier_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -33,24 +33,44 @@ public class bookDAO {
     }
 
     // Read - Get all books
-    public List<book> getAllBooks() {
+    public static List<book> getAllBooks() {
         List<book> books = new ArrayList<>();
-        String sql = "SELECT * FROM books ORDER BY title";
+//        String sql = "SELECT * FROM book ORDER BY title";
+        String sql =
+                "SELECT b.*, c.category_name, s.supplier_name " +
+                        "FROM book b " +
+                        "JOIN category c ON b.category_id = c.category_id " +
+                        "JOIN supplier s ON b.supplier_id = s.supplier_id " +
+                        "ORDER BY b.title";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
+//                book b = new book(
+//                        rs.getInt("book_id"),
+//                        rs.getString("title"),
+//                        rs.getString("author"),
+//                        rs.getDouble("price"),
+//                        rs.getInt("quantity"),
+//                        rs.getInt("category_id"),
+//                        rs.getInt("supplier_id")
+//                );
+//                books.add(b);
                 book b = new book(
                         rs.getInt("book_id"),
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
-                        rs.getInt("stock_quantity"),
+                        rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
+
+                b.setCategoryName(rs.getString("category_name"));
+                b.setSupplierName(rs.getString("supplier_name"));
+
                 books.add(b);
             }
         } catch (SQLException e) {
@@ -62,7 +82,7 @@ public class bookDAO {
 
     // Read - Get book by ID
     public book getBookById(int bookId) {
-        String sql = "SELECT * FROM books WHERE book_id = ?";
+        String sql = "SELECT * FROM book WHERE book_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -76,7 +96,7 @@ public class bookDAO {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
-                        rs.getInt("stock_quantity"),
+                        rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
@@ -91,7 +111,7 @@ public class bookDAO {
     // Read - Search books by title or author
     public List<book> searchBooks(String keyword) {
         List<book> books = new ArrayList<>();
-        String sql = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ? ORDER BY title";
+        String sql = "SELECT * FROM book WHERE title LIKE ? OR author LIKE ? ORDER BY title";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -107,7 +127,7 @@ public class bookDAO {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
-                        rs.getInt("stock_quantity"),
+                        rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
@@ -123,7 +143,7 @@ public class bookDAO {
     // Read - Get books by category
     public List<book> getBooksByCategory(int categoryId) {
         List<book> books = new ArrayList<>();
-        String sql = "SELECT * FROM books WHERE category_id = ? ORDER BY title";
+        String sql = "SELECT * FROM book WHERE category_id = ? ORDER BY title";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -137,7 +157,7 @@ public class bookDAO {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
-                        rs.getInt("stock_quantity"),
+                        rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
@@ -153,7 +173,7 @@ public class bookDAO {
     // Read - Get books by supplier
     public List<book> getBooksBySupplier(int supplierId) {
         List<book> books = new ArrayList<>();
-        String sql = "SELECT * FROM books WHERE supplier_id = ? ORDER BY title";
+        String sql = "SELECT * FROM book WHERE supplier_id = ? ORDER BY title";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -167,7 +187,7 @@ public class bookDAO {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
-                        rs.getInt("stock_quantity"),
+                        rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
@@ -182,7 +202,7 @@ public class bookDAO {
 
     // Update - Update book details
     public boolean updateBook(book book) {
-        String sql = "UPDATE books SET title = ?, author = ?, price = ?, stock_quantity = ?, category_id = ?, supplier_id = ? WHERE book_id = ?";
+        String sql = "UPDATE book SET title = ?, author = ?, price = ?, quantity = ?, category_id = ?, supplier_id = ? WHERE book_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -207,7 +227,7 @@ public class bookDAO {
 
     // Update - Update stock quantity only
     public boolean updateStock(int bookId, int newQuantity) {
-        String sql = "UPDATE books SET stock_quantity = ? WHERE book_id = ?";
+        String sql = "UPDATE book SET quantity = ? WHERE book_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -227,7 +247,7 @@ public class bookDAO {
 
     // Delete - Delete a book
     public boolean deleteBook(int bookId) {
-        String sql = "DELETE FROM books WHERE book_id = ?";
+        String sql = "DELETE FROM book WHERE book_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -245,7 +265,7 @@ public class bookDAO {
 
     // Check if book exists
     public boolean bookExists(int bookId) {
-        String sql = "SELECT COUNT(*) FROM books WHERE book_id = ?";
+        String sql = "SELECT COUNT(*) FROM book WHERE book_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -264,8 +284,8 @@ public class bookDAO {
     }
 
     // Get total number of books
-    public int getTotalBooks() {
-        String sql = "SELECT COUNT(*) FROM books";
+    public static int getTotalBooks() {
+        String sql = "SELECT COUNT(*) FROM book";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -278,6 +298,51 @@ public class bookDAO {
             System.err.println("Error getting total books: " + e.getMessage());
             e.printStackTrace();
         }
+        return 0;
+    }
+    // get low stock
+    public static List<book> getLowStockBooks() {
+        List<book> books = new ArrayList<>();
+        String sql = "SELECT * FROM book WHERE quantity < 5 ";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                books.add(new book(
+                        rs.getInt("book_id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getInt("category_id"),
+                        rs.getInt("supplier_id")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
+    // get total stock
+    public static int getTotalStock() {
+        String sql = "SELECT SUM(quantity) FROM book";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return 0;
     }
 }

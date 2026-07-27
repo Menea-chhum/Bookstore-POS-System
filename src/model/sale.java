@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class sale {
@@ -14,6 +15,15 @@ public class sale {
         this.saleDate = saleDate;
     }
 
+    public void setSaleId(int saleId){
+        this.saleId = saleId;
+    }
+    public void setStaffId(int staffId){
+        this.staffId = staffId;
+    }
+    public void setSaleDate(Timestamp saleDate){
+        this.saleDate = saleDate;
+    }
     public int  getSaleId ()
     {
         return saleId;

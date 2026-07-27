@@ -10,7 +10,7 @@ public class categoryDAO {
 
     // Create - Add a new category
     public boolean addCategory(category category) {
-        String sql = "INSERT INTO categories (category_name, description) VALUES (?, ?)";
+        String sql = "INSERT INTO category (category_name, description) VALUES (?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -29,9 +29,9 @@ public class categoryDAO {
     }
 
     // Read - Get all categories
-    public List<category> getAllCategories() {
-        List<category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM categories ORDER BY category_name";
+    public static List<category> getAllCategories() {
+        List<category> category = new ArrayList<>();
+        String sql = "SELECT * FROM category ORDER BY category_name";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -43,18 +43,18 @@ public class categoryDAO {
                         rs.getString("category_name"),
                         rs.getString("description")
                 );
-                categories.add(c);
+                category.add(c);
             }
         } catch (SQLException e) {
             System.err.println("Error getting all categories: " + e.getMessage());
             e.printStackTrace();
         }
-        return categories;
+        return category;
     }
 
     // Read - Get category by ID
     public category getCategoryById(int categoryId) {
-        String sql = "SELECT * FROM categories WHERE category_id = ?";
+        String sql = "SELECT * FROM category WHERE category_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class categoryDAO {
 
     // Read - Get category by name
     public category getCategoryByName(String categoryName) {
-        String sql = "SELECT * FROM categories WHERE category_name = ?";
+        String sql = "SELECT * FROM category WHERE category_name = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class categoryDAO {
 
     // Update - Update category
     public boolean updateCategory(category category) {
-        String sql = "UPDATE categories SET category_name = ?, description = ? WHERE category_id = ?";
+        String sql = "UPDATE category SET category_name = ?, description = ? WHERE category_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -123,7 +123,7 @@ public class categoryDAO {
 
     // Delete - Delete category
     public boolean deleteCategory(int categoryId) {
-        String sql = "DELETE FROM categories WHERE category_id = ?";
+        String sql = "DELETE FROM category WHERE category_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -141,7 +141,7 @@ public class categoryDAO {
 
     // Check if category has books
     public boolean hasBooks(int categoryId) {
-        String sql = "SELECT COUNT(*) FROM books WHERE category_id = ?";
+        String sql = "SELECT COUNT(*) FROM book WHERE category_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -160,8 +160,8 @@ public class categoryDAO {
     }
 
     // Get total number of categories
-    public int getTotalCategories() {
-        String sql = "SELECT COUNT(*) FROM categories";
+    public static int getTotalCategories() {
+        String sql = "SELECT COUNT(*) FROM category";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -176,4 +176,26 @@ public class categoryDAO {
         }
         return 0;
     }
+    // count by category
+    public int getBookCountByCategory(int categoryId) {
+        String sql = "SELECT COUNT(*) FROM book WHERE category_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, categoryId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+    // load category to combo box
+
 }
