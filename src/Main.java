@@ -1,6 +1,9 @@
 import form.logIn;
+import form.cashierDashboard;
+import form.SaleNew;
 
 import javax.swing.*;
+
 
 
 public class Main {
@@ -12,6 +15,8 @@ public class Main {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
     }
+
 
 }
