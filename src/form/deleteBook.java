@@ -12,19 +12,22 @@ public class deleteBook {
 
     private book currentBook;
     private bookDAO dao = new bookDAO();
+    private Runnable refreshCallback;
 
     public JPanel getMainPanel()
     {
         return mainPanel;
     }
 
-    public deleteBook(book b) {
+    public deleteBook(book b, Runnable refreshCallback) {
 
         currentBook = b;
+        this.refreshCallback = refreshCallback;
 
         deleteButton.addActionListener(e -> deleteBook());
 
         cancelButton.addActionListener(e -> closeWindow());
+
 
     }
     private void deleteBook() {
@@ -36,9 +39,14 @@ public class deleteBook {
                     "Book deleted successfully."
             );
 
+            if (refreshCallback != null) {
+                refreshCallback.run();
+            }
+
             closeWindow();
 
-        } else {
+        }
+        else {
 
             JOptionPane.showMessageDialog(
                     mainPanel,

@@ -4,6 +4,7 @@ import DAO.bookDAO;
 import DAO.categoryDAO;
 import DAO.supplierDAO;
 import model.book;
+import model.category;
 import model.staff;
 import model.supplier;
 
@@ -52,12 +53,16 @@ public class adminDashboard {
 
     // Low stock
     private JPanel lowStockPanel;
-    private JLabel lowStockItemLabel;
-    private JLabel lowestStockTitleLabel;
-    private JLabel alertMessageLabel;
+    private JLabel totalLowStockItemLabel;
+    private JLabel outOfStockLabel;
+    private JLabel criticalBookLabel;
     private JTable lowStockTable;
     private JButton deleteButton;
     private JButton updateButton;
+    private JButton deleteButton1;
+    private JButton updateButton1;
+    private JButton updateButton2;
+    private JButton deleteButton2;
 
     public JPanel getMainPanel() {
         return mainPanel;
@@ -71,12 +76,40 @@ public class adminDashboard {
         loadDashboardStatistics();
         loadBookTable();
         loadSupplierTable();
+        loadCategoryFilter();
+//        categoryGridPanel.setLayout(
+//                new GridLayout(0, 5, 10, 10)
+//        );
+        categoryGridPanel.setLayout(
+                new FlowLayout(FlowLayout.LEFT, 15, 15)
+        );
+
+        loadCategoryCards();
+        loadLowStockStatistics();
+        loadLowStockTable();
 
         addBookBtn.addActionListener(e -> openAddBookForm());
         updateButton.addActionListener(e ->openUpdateForm());
 //        deleteButton.addActionListener(e -> openDeleteDiaglog());
         logoutBtn.addActionListener(e -> openLogoutForm());
         deleteButton.addActionListener(e -> openDeleteDialog());
+
+        //typing listen
+        bookSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchBooks();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchBooks();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                searchBooks();
+            }
+        });
+        categoryFilterCombo.addActionListener(e -> searchBooks());
     }
 
     private void loadDashboardStatistics() {
@@ -87,7 +120,7 @@ public class adminDashboard {
     }
 
     // Load the book table
-    private void loadBookTable() {
+    private void loadBookTable(List<book> books) {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"ID", "Title", "Author", "Price", "Quantity", "Category", "Supplier"}, 0);
         bookTable.setModel(model);
@@ -108,13 +141,7 @@ public class adminDashboard {
                 new Dimension(0,35)
         );
 
-        List<book> books = bookDAO.getAllBooks();
         for (book b : books) {
-//            model.addRow(new Object[]{
-//                    b.getBookId(), b.getTitle(), b.getAuthor(),
-//                    b.getPrice(), b.getStockQuantity(),
-//                    b.getCategoryId(), b.getSupplierId(), "Edit"
-//            });
             model.addRow(new Object[]{
                     b.getBookId(),
                     b.getTitle(),
@@ -135,6 +162,9 @@ public class adminDashboard {
                     .setCellRenderer(center);
         }
     }
+    private void loadBookTable() {
+        loadBookTable(bookDAO.getAllBooks());
+    }
     private void openAddBookForm() {
 
         JFrame frame = new JFrame("Add Book");
@@ -153,41 +183,6 @@ public class adminDashboard {
         frame.setVisible(true);
     }
 
-//    private void openUpdateForm(){
-//        JFrame frame = new JFrame("Update Book");
-//
-//        editBook form = new editBook();
-//
-//        frame.setContentPane(form.getContentPane());
-//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frame.pack();
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
-//    }
-//private void openUpdateForm() {
-//
-//    int row = bookTable.getSelectedRow();
-//
-//    if (row == -1) {
-//        JOptionPane.showMessageDialog(
-//                mainPanel,
-//                "Please select a book to update."
-//        );
-//        return;
-//    }
-//
-//    int bookId = (int) bookTable.getValueAt(row, 0);
-//
-//    bookDAO dao = new bookDAO();
-//    book selectedBook = dao.getBookById(bookId);
-//
-//    editBook dialog = new editBook(selectedBook);
-//
-//    dialog.setLocationRelativeTo(mainPanel);
-//    dialog.setVisible(true);
-//
-//    loadBookTable();
-//}
 private void openUpdateForm() {
 
     int row = bookTable.getSelectedRow();
@@ -230,7 +225,12 @@ private void openUpdateForm() {
         bookDAO dao = new bookDAO();
         book selectedBook = dao.getBookById(bookId);
 
-        deleteBook dialog = new deleteBook(selectedBook);
+        deleteBook dialog = new deleteBook(selectedBook, () -> {
+
+            loadDashboardStatistics();
+            loadBookTable();
+
+        });
 
         JFrame frame = new JFrame("Delete Book");
         frame.setContentPane(dialog.getMainPanel());
@@ -239,19 +239,21 @@ private void openUpdateForm() {
         frame.setLocationRelativeTo(mainPanel);
         frame.setVisible(true);
 
-        loadDashboardStatistics();
-        loadBookTable();
 
     }
 
-    private void openLogoutForm(){
-        JFrame frame = new JFrame("Log out");
-        logOut form = new logOut();
-        frame.setContentPane(form.getContentPane());
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+    private void openLogoutForm() {
+
+//        logOut dialog = new logOut();
+        Window dashboardWindow =
+                SwingUtilities.getWindowAncestor(mainPanel);
+
+        logOut dialog = new logOut(dashboardWindow);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainPanel);
+        dialog.setVisible(true);
+
     }
 
     private void loadSupplierTable()
@@ -297,5 +299,218 @@ private void openUpdateForm() {
                     .getColumn(i)
                     .setCellRenderer(center);
         }
+
+    }
+    private void loadCategoryFilter() {
+
+        categoryFilterCombo.removeAllItems();
+
+        categoryFilterCombo.addItem("All Categories");
+
+        List<model.category> categories = categoryDAO.getAllCategories();
+
+        for (model.category c : categories) {
+
+            categoryFilterCombo.addItem(c.getCategoryName());
+
+        }
+    }
+    private void searchBooks() {
+
+        String keyword = bookSearchField.getText().trim();
+
+        String category =
+                (String) categoryFilterCombo.getSelectedItem();
+
+        List<book> books =
+                bookDAO.searchAndFilterBooks(keyword, category);
+
+        loadBookTable(books);
+    }
+//
+private JPanel createCategoryCard(category c) {
+
+    JPanel card = new JPanel();
+
+    // smaller card size
+    card.setPreferredSize(new Dimension(300, 120));
+
+    // add space inside the card (padding)
+    card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+            BorderFactory.createEmptyBorder(12, 15, 12, 15)
+    ));
+
+    card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+    card.setBackground(Color.WHITE);
+
+
+    JLabel title = new JLabel(c.getCategoryName());
+    title.setFont(new Font("Segoe UI", Font.BOLD, 16));
+    title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+    JLabel description = new JLabel(
+            "<html><body style='width:160px'>"
+                    + c.getDescription()
+                    + "</body></html>"
+    );
+    description.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+    description.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+    categoryDAO dao = new categoryDAO();
+    int bookCount = dao.getBookCountByCategory(c.getCategoryId());
+
+    JLabel count = new JLabel(bookCount + " Books");
+    count.setForeground(new Color(34, 139, 34));
+    count.setFont(new Font("Segoe UI", Font.BOLD, 13));
+    count.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+    card.add(title);
+    card.add(Box.createVerticalStrut(8));
+    card.add(description);
+    card.add(Box.createVerticalGlue());
+    card.add(count);
+
+
+    return card;
+}
+    private void loadCategoryCards() {
+
+        categoryGridPanel.removeAll();
+
+        List<category> categories =
+                categoryDAO.getAllCategories();
+
+        for(category c : categories){
+
+            JPanel card =
+                    createCategoryCard(c);
+
+            categoryGridPanel.add(card);
+
+        }
+
+        categoryGridPanel.revalidate();
+
+        categoryGridPanel.repaint();
+
+    }
+    private void loadLowStockStatistics() {
+
+        // Total low stock items
+        int lowStockCount = bookDAO.getLowStockBooks().size();
+
+        totalLowStockItemLabel.setText(
+                String.valueOf(lowStockCount)
+        );
+
+
+        // Out of stock
+        int outStock = bookDAO.getOutOfStockBooks();
+
+        outOfStockLabel.setText(
+                String.valueOf(outStock)
+        );
+
+
+        // Critical book
+        book criticalBook = bookDAO.getCriticalBook();
+
+        if (criticalBook != null) {
+
+            criticalBookLabel.setText(
+                    criticalBook.getTitle()
+                            + " ("
+                            + criticalBook.getStockQuantity()
+                            + ")"
+            );
+
+        } else {
+
+            criticalBookLabel.setText("No Data");
+
+        }
+    }
+    private void loadLowStockTable() {
+
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{
+                        "ID",
+                        "Title",
+                        "Author",
+                        "Quantity",
+                        "Category",
+                        "Supplier"
+                }, 0
+        );
+
+        lowStockTable.setModel(model);
+
+        lowStockTable.setRowHeight(35);
+        lowStockTable.getTableHeader().setPreferredSize(
+                new Dimension(0,35)
+        );
+
+
+        List<book> books = bookDAO.getLowStockBooks();
+
+
+        for (book b : books) {
+
+            model.addRow(new Object[]{
+                    b.getBookId(),
+                    b.getTitle(),
+                    b.getAuthor(),
+                    b.getStockQuantity(),
+                    b.getCategoryName(),
+                    b.getSupplierName()
+            });
+
+        }
+
+
+        // Center text
+        DefaultTableCellRenderer center =
+                new DefaultTableCellRenderer();
+
+        center.setHorizontalAlignment(JLabel.CENTER);
+
+
+        for(int i = 0; i < lowStockTable.getColumnCount(); i++){
+
+            lowStockTable.getColumnModel()
+                    .getColumn(i)
+                    .setCellRenderer(center);
+
+        }
+
+
+        // Column sizes
+        lowStockTable.getColumnModel()
+                .getColumn(0)
+                .setPreferredWidth(50);
+
+        lowStockTable.getColumnModel()
+                .getColumn(1)
+                .setPreferredWidth(180);
+
+        lowStockTable.getColumnModel()
+                .getColumn(2)
+                .setPreferredWidth(150);
+
+        lowStockTable.getColumnModel()
+                .getColumn(3)
+                .setPreferredWidth(80);
+
+        lowStockTable.getColumnModel()
+                .getColumn(4)
+                .setPreferredWidth(120);
+
+        lowStockTable.getColumnModel()
+                .getColumn(5)
+                .setPreferredWidth(120);
     }
 }

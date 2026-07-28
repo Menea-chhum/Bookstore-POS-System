@@ -80,6 +80,59 @@ public class bookDAO {
         return books;
     }
 
+    public static List<book> searchAndFilterBooks(String keyword, String categoryName) {
+
+        List<book> books = new ArrayList<>();
+
+        String sql =
+                "SELECT b.*, c.category_name, s.supplier_name " +
+                        "FROM book b " +
+                        "JOIN category c ON b.category_id = c.category_id " +
+                        "JOIN supplier s ON b.supplier_id = s.supplier_id " +
+                        "WHERE (b.title LIKE ? OR b.author LIKE ?)";
+
+        if (!categoryName.equals("All Categories")) {
+            sql += "AND c.category_name = ? ";
+        }
+
+        sql += "ORDER BY b.title";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+
+            if (!categoryName.equals("All Categories")) {
+                ps.setString(3, categoryName);
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                book b = new book(
+                        rs.getInt("book_id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getInt("category_id"),
+                        rs.getInt("supplier_id")
+                );
+
+                b.setCategoryName(rs.getString("category_name"));
+                b.setSupplierName(rs.getString("supplier_name"));
+
+                books.add(b);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return books;
+    }
     // Read - Get book by ID
     public book getBookById(int bookId) {
         String sql = "SELECT * FROM book WHERE book_id = ?";
@@ -301,16 +354,53 @@ public class bookDAO {
         return 0;
     }
     // get low stock
+//    public static List<book> getLowStockBooks() {
+//        List<book> books = new ArrayList<>();
+//        String sql = "SELECT * FROM book WHERE quantity < 5 ORDER BY quantity ASC";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(sql)) {
+//
+//            while (rs.next()) {
+//                books.add(new book(
+//                        rs.getInt("book_id"),
+//                        rs.getString("title"),
+//                        rs.getString("author"),
+//                        rs.getDouble("price"),
+//                        rs.getInt("quantity"),
+//                        rs.getInt("category_id"),
+//                        rs.getInt("supplier_id")
+//                ));
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return books;
+//    }
     public static List<book> getLowStockBooks() {
+
         List<book> books = new ArrayList<>();
-        String sql = "SELECT * FROM book WHERE quantity < 5 ";
+
+        String sql =
+                "SELECT b.*, c.category_name, s.supplier_name " +
+                        "FROM book b " +
+                        "JOIN category c ON b.category_id = c.category_id " +
+                        "JOIN supplier s ON b.supplier_id = s.supplier_id " +
+                        "WHERE b.quantity < 5 " +
+                        "ORDER BY b.quantity ASC";
+
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            while (rs.next()) {
-                books.add(new book(
+
+            while(rs.next()) {
+
+                book b = new book(
                         rs.getInt("book_id"),
                         rs.getString("title"),
                         rs.getString("author"),
@@ -318,14 +408,77 @@ public class bookDAO {
                         rs.getInt("quantity"),
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
-                ));
+                );
+
+
+                b.setCategoryName(
+                        rs.getString("category_name")
+                );
+
+                b.setSupplierName(
+                        rs.getString("supplier_name")
+                );
+
+
+                books.add(b);
+            }
+
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return books;
+    }
+    // Get number of out of stock books
+    public static int getOutOfStockBooks() {
+
+        String sql = "SELECT COUNT(*) FROM book WHERE quantity = 0";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return books;
+        return 0;
+    }
+
+
+    // Get book with lowest quantity
+    public static book getCriticalBook() {
+
+        String sql = "SELECT * FROM book ORDER BY quantity ASC LIMIT 1";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+
+                return new book(
+                        rs.getInt("book_id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getInt("category_id"),
+                        rs.getInt("supplier_id")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
     // get total stock
     public static int getTotalStock() {
@@ -345,4 +498,5 @@ public class bookDAO {
 
         return 0;
     }
+
 }
