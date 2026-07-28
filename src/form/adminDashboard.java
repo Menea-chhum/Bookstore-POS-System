@@ -42,6 +42,8 @@ public class adminDashboard {
     private JButton addCategoryButton;
     private JTextField categorySearchField;
     private JPanel categoryGridPanel;
+    private category selectedCategory = null;
+    private JPanel selectedCard = null;
 
     // Supplier
     private JTextField searchSuppliersTextField;
@@ -57,10 +59,10 @@ public class adminDashboard {
     private JLabel outOfStockLabel;
     private JLabel criticalBookLabel;
     private JTable lowStockTable;
-    private JButton deleteButton;
-    private JButton updateButton;
-    private JButton deleteButton1;
-    private JButton updateButton1;
+    private JButton deleteBookButton;
+    private JButton updateBookButton;
+    private JButton deleteCategoryBtn;
+    private JButton updateCategoryBtn;
     private JButton updateButton2;
     private JButton deleteButton2;
 
@@ -89,10 +91,18 @@ public class adminDashboard {
         loadLowStockTable();
 
         addBookBtn.addActionListener(e -> openAddBookForm());
-        updateButton.addActionListener(e ->openUpdateForm());
-//        deleteButton.addActionListener(e -> openDeleteDiaglog());
+        updateBookButton.addActionListener(e ->openUpdateBookForm());
+        deleteBookButton.addActionListener(e->openDeleteBookDialog());
+
+        addCategoryButton.addActionListener(e -> openAddCategoryForm());
+        updateCategoryBtn.addActionListener(e -> openUpdateCategory());
+        deleteCategoryBtn.addActionListener(e -> openDeleteCategory());
+
         logoutBtn.addActionListener(e -> openLogoutForm());
-        deleteButton.addActionListener(e -> openDeleteDialog());
+
+
+//        updateButton2.addActionListener(e -> openUpdateCategory());
+
 
         //typing listen
         bookSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
@@ -110,6 +120,7 @@ public class adminDashboard {
             }
         });
         categoryFilterCombo.addActionListener(e -> searchBooks());
+
     }
 
     private void loadDashboardStatistics() {
@@ -118,6 +129,7 @@ public class adminDashboard {
         totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
         totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
     }
+
 
     // Load the book table
     private void loadBookTable(List<book> books) {
@@ -182,8 +194,31 @@ public class adminDashboard {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+    private void openAddCategoryForm() {
 
-private void openUpdateForm() {
+        JFrame frame = new JFrame("Add Category");
+
+        addCategoryForm form = new addCategoryForm(() -> {
+
+            loadCategoryCards();
+            loadCategoryFilter();
+            loadDashboardStatistics();
+            mainPanel.revalidate();
+            mainPanel.repaint();
+            selectedCategory = null;
+            selectedCard = null;
+
+        });
+
+        frame.setContentPane(form.getMainPanel());
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(mainPanel);
+        frame.setVisible(true);
+
+    }
+
+private void openUpdateBookForm() {
 
     int row = bookTable.getSelectedRow();
 
@@ -208,7 +243,7 @@ private void openUpdateForm() {
     loadBookTable();
 }
 
-    private void openDeleteDialog() {
+    private void openDeleteBookDialog() {
 
         int row = bookTable.getSelectedRow();
 
@@ -374,6 +409,31 @@ private JPanel createCategoryCard(category c) {
     card.add(Box.createVerticalGlue());
     card.add(count);
 
+    card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
+    card.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+
+            selectedCategory = c;
+
+            if (selectedCard != null) {
+                selectedCard.setBorder(
+                        BorderFactory.createLineBorder(Color.LIGHT_GRAY)
+                );
+            }
+
+            selectedCard = card;
+
+            card.setBorder(
+                    BorderFactory.createLineBorder(
+                            new Color(0,120,215),
+                            3
+                    )
+            );
+        }
+    });
 
     return card;
 }
@@ -512,5 +572,73 @@ private JPanel createCategoryCard(category c) {
         lowStockTable.getColumnModel()
                 .getColumn(5)
                 .setPreferredWidth(120);
+    }
+    private void openUpdateCategory() {
+
+        if (selectedCategory == null) {
+
+            JOptionPane.showMessageDialog(
+                    mainPanel,
+                    "Please select a category."
+            );
+
+            return;
+        }
+
+        editCategory dialog = new editCategory(
+                selectedCategory,
+                () -> {
+
+                    loadCategoryCards();
+                    loadCategoryFilter();
+                    loadBookTable();              // refresh book table
+                    loadDashboardStatistics();
+
+                    mainPanel.revalidate();
+                    mainPanel.repaint();
+                    selectedCategory = null;
+                    selectedCard = null;
+
+                }
+        );
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainPanel);
+        dialog.setVisible(true);
+    }
+    private void openDeleteCategory() {
+
+        if (selectedCategory == null) {
+
+            JOptionPane.showMessageDialog(
+                    mainPanel,
+                    "Please select a category."
+            );
+
+            return;
+        }
+
+        JFrame frame = new JFrame("Delete Category");
+
+        deleteCategory form = new deleteCategory(
+                selectedCategory,
+                () -> {
+
+                    loadCategoryCards();
+                    loadCategoryFilter();
+                    loadBookTable();              // refresh book table
+                    loadDashboardStatistics();
+                    mainPanel.revalidate();
+                    mainPanel.repaint();
+                    selectedCategory = null;
+                    selectedCard = null;
+                }
+        );
+
+        frame.setContentPane(form.getMainPanel());
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(mainPanel);
+        frame.setVisible(true);
     }
 }
