@@ -7,6 +7,8 @@ import model.book;
 import model.category;
 import model.staff;
 import model.supplier;
+import DAO.saleDetailDAO;
+import model.saleDetail;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -180,6 +182,9 @@ public class adminDashboard {
                 searchSupplier();
             }
         });
+
+        loadSupplierTable();
+        loadSaleDetailTable();
 
     }
 //
@@ -885,6 +890,41 @@ private JPanel createCategoryCard(category c) {
                     s.getContactNumber(),
                     s.getEmail(),
                     s.getAddress()
+            });
+
+        }
+    }
+    private void loadSaleDetailTable(){
+
+        DefaultTableModel model =
+                new DefaultTableModel(
+                        new Object[]{
+                                "Sale ID",
+                                "Book Title",
+                                "Quantity",
+                                "Unit Price",
+                                "Date",
+                                "Cashier"
+                        },0
+                );
+
+
+        saleDetailTable.setModel(model);
+
+
+        List<saleDetail> details =
+                saleDetailDAO.getAllSaleDetails();
+
+
+        for(saleDetail sd : details){
+
+            model.addRow(new Object[]{
+                    sd.getSaleId(),
+                    sd.getBookTitle(),
+                    sd.getQuantitySold(),
+                    sd.getUnitPrice(),
+                    sd.getSaleDate(),
+                    sd.getCashierName()
             });
 
         }

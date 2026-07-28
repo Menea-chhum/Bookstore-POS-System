@@ -15,6 +15,7 @@ public class sale {
         this.saleDate = saleDate;
     }
 
+
     public void setSaleId(int saleId){
         this.saleId = saleId;
     }
