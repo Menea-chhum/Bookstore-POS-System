@@ -27,7 +27,7 @@ public class logIn {
     public logIn() {
 
         failMsg.setVisible(false);
-        failMsg.setForeground(new Color(0xD2691E));
+        failMsg.setForeground(Color.RED);
         failMsg.setText("Invalid username or password");
 
         logInButton.addActionListener(new ActionListener() {
