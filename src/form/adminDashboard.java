@@ -18,6 +18,7 @@ import java.util.List;
 
 public class adminDashboard {
     private JPanel mainPanel;
+    private JTextField categorySearchField;
     private JLabel storeLogo;
     private JLabel avatarLabel;
     private JButton logoutBtn;
