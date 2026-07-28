@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="addCategoryForm">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="form.addCategoryForm">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="928" height="854"/>
+      <xy x="20" y="20" width="1059" height="854"/>
     </constraints>
     <properties>
       <background color="-1773060"/>
