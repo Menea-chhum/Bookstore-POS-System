@@ -1,5 +1,7 @@
 package form;
 
+import model.staff;
+
 import javax.swing.*;
 
 public class cashierDashboard {
@@ -9,7 +11,7 @@ public class cashierDashboard {
     private JButton newSaleButton;
     private JButton logoutButton;
 
-    public cashierDashboard() {
+    public cashierDashboard(staff loggedInStaff) {
 
         // Open New Sale Form
         newSaleButton.addActionListener(e -> {
@@ -18,7 +20,7 @@ public class cashierDashboard {
             currentFrame.dispose();
 
             JFrame frame = new JFrame("New Sale");
-            frame.setContentPane(new SaleNew().getMainPanel());   // Change to newSale() if your class is named newSale
+            frame.setContentPane(new NewSale().getMainPanel());   // Change to newSale() if your class is named newSale
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null);
