@@ -1,6 +1,6 @@
 import form.logIn;
 import form.cashierDashboard;
-import form.SaleNew;
+import form.NewSale;
 
 import javax.swing.*;
 
