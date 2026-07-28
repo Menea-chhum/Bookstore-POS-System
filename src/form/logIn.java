@@ -25,7 +25,6 @@ public class logIn {
     }
 
     public logIn() {
-
         failMsg.setVisible(false);
         failMsg.setForeground(Color.RED);
         failMsg.setText("Invalid username or password");
@@ -33,69 +32,115 @@ public class logIn {
         logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                performLogin();
+            }
+        });
 
-                Connection con = DBConnection.getConnection();
+        // Add Enter key listener
+        usernameInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performLogin();
+            }
+        });
 
-                if (con != null) {
-
-                    String sql = "SELECT * FROM staff WHERE username = ? AND password = ?";
-
-                    try (PreparedStatement ppst = con.prepareStatement(sql)) {
-
-                        ppst.setString(1, usernameInput.getText());
-                        ppst.setString(2, new String(passwordInput.getPassword()));
-
-                        ResultSet rs = ppst.executeQuery();
-
-                        if (rs.next()) {
-                            staff loggedInStaff = new staff(
-                                    rs.getInt("staff_id"),
-                                    rs.getString("username"),
-                                    rs.getString("password"),
-                                    rs.getString("full_name"),
-                                    rs.getString("role")
-                            );
-
-                            if (loggedInStaff.getRole().equalsIgnoreCase("Admin")) {
-
-                                openDashboard(
-                                        new adminDashboard(loggedInStaff).getMainPanel(),
-                                        "Admin Dashboard"
-                                );
-
-                            } else if (loggedInStaff.getRole().equalsIgnoreCase("Cashier")) {
-
-                                JOptionPane.showMessageDialog(null, "Cashier login successful!");
-
-                                openDashboard(
-                                        new cashierDashboard().getMainPanel(),
-                                        "Cashier Dashboard"
-                                );
-                            }
-
-                        } else {
-                            failMsg.setVisible(true);
-                        }
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null,
-                                "Database Error: " + ex.getMessage());
-                    }
-                }
+        passwordInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performLogin();
             }
         });
     }
 
-    private void openDashboard(JPanel panel, String title) {
+    private void performLogin() {
+        String username = usernameInput.getText().trim();
+        String password = new String(passwordInput.getPassword()).trim();
 
+        if (username.isEmpty() || password.isEmpty()) {
+            failMsg.setText("Please enter username and password");
+            failMsg.setVisible(true);
+            return;
+        }
+
+        Connection con = null;
+        try {
+            con = DBConnection.getConnection();
+
+            if (con == null) {
+                JOptionPane.showMessageDialog(mainPanel,
+                        "Database connection failed!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String sql = "SELECT * FROM staff WHERE username = ? AND password = ?";
+
+            try (PreparedStatement ppst = con.prepareStatement(sql)) {
+                ppst.setString(1, username);
+                ppst.setString(2, password);
+
+                try (ResultSet rs = ppst.executeQuery()) {
+                    if (rs.next()) {
+                        // Create staff object with ALL fields
+                        staff loggedInStaff = new staff(
+                                rs.getInt("staff_id"),
+                                rs.getString("username"),
+                                rs.getString("password"),
+                                rs.getString("full_name"),
+                                rs.getString("role")
+                        );
+
+                        // Debug output
+                        System.out.println("Staff logged in: " + loggedInStaff.getFull_name());
+                        System.out.println("Staff ID: " + loggedInStaff.getStaffId());
+                        System.out.println("Role: " + loggedInStaff.getRole());
+
+                        failMsg.setVisible(false);
+
+                        // Open appropriate dashboard with staff object
+                        if (loggedInStaff.getRole().equalsIgnoreCase("Admin")) {
+                            adminDashboard adminDash = new adminDashboard(loggedInStaff);
+                            openDashboard(adminDash.getMainPanel(), "Admin Dashboard");
+                        } else if (loggedInStaff.getRole().equalsIgnoreCase("Cashier")) {
+                            cashierDashboard cashierDash = new cashierDashboard(loggedInStaff);
+                            openDashboard(cashierDash.getMainPanel(), "Cashier Dashboard");
+                        } else {
+                            JOptionPane.showMessageDialog(mainPanel,
+                                    "Unknown role: " + loggedInStaff.getRole(),
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        failMsg.setText("Invalid username or password");
+                        failMsg.setVisible(true);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainPanel,
+                    "Database Error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (con != null) con.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void openDashboard(JPanel panel, String title) {
         JFrame frame = new JFrame(title);
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setSize(1200, 700);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        // Close login window
         Window window = SwingUtilities.getWindowAncestor(mainPanel);
         if (window != null) {
             window.dispose();
