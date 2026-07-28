@@ -100,7 +100,6 @@
               <contentAreaFilled value="false"/>
               <font size="22" style="1"/>
               <foreground color="-13926447"/>
-              <inheritsPopupMenu value="false"/>
               <opaque value="false"/>
               <text value="➜]"/>
             </properties>
@@ -162,20 +161,14 @@
                                 <properties>
                                   <columns value="120"/>
                                   <foreground color="-8875608"/>
-<<<<<<< HEAD
-                                  <preferredSize width="1326" height="32"/>
-                                  <text value="Search book by title or author"/>
-=======
                                   <preferredSize width="1088" height="32"/>
                                   <text value=""/>
->>>>>>> 615f38a73a848c131289eed1e54b3d900414a0b6
                                 </properties>
                               </component>
                               <component id="71065" class="javax.swing.JComboBox" binding="categoryFilterCombo">
                                 <constraints/>
                                 <properties>
                                   <background color="-1"/>
-                                  <model/>
                                   <preferredSize width="160" height="32"/>
                                 </properties>
                               </component>
@@ -566,7 +559,7 @@
                             <properties>
                               <columns value="140"/>
                               <foreground color="-8875608"/>
-                              <preferredSize width="1546" height="30"/>
+                              <preferredSize width="1268" height="30"/>
                               <text value="Seach categories"/>
                             </properties>
                           </component>
