@@ -1,3 +1,8 @@
+package form;
+
+import DAO.supplierDAO;
+import model.supplier;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -9,37 +14,39 @@ public class editSupplier extends JDialog {
     private JTextField contactNumField;
     private JTextField emailField;
     private JTextField addressField;
+    private supplier selectedSupplier;
 
-    public editSupplier() {
+    public JPanel getContentPane(){
+        return contentPane;
+    }
+
+
+    public editSupplier(supplier supplier) {
+
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonCancel);
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        this.selectedSupplier = supplier;
 
-        buttonSaveChange.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {onSaveChange();
-            }
-        });
+        // show old data in fields
+        supplierNameField.setText(supplier.getSupplierName());
+        contactNumField.setText(supplier.getContactNumber());
+        emailField.setText(supplier.getEmail());
+        addressField.setText(supplier.getAddress());
 
-        // call onCancel() when cross is clicked
+
+        buttonCancel.addActionListener(e -> onCancel());
+
+        buttonSaveChange.addActionListener(e -> onSaveChange());
+
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onCancel() {
@@ -48,14 +55,43 @@ public class editSupplier extends JDialog {
     }
 
     private void onSaveChange() {
-        // add your code here if necessary
-        dispose();
+
+        String name = supplierNameField.getText().trim();
+        String contact = contactNumField.getText().trim();
+        String email = emailField.getText().trim();
+        String address = addressField.getText().trim();
+
+
+        supplier updatedSupplier = new supplier(
+                selectedSupplier.getSupplierId(),
+                name,
+                contact,
+                email,
+                address
+        );
+
+
+        supplierDAO dao = new supplierDAO();
+
+        boolean success = dao.updateSupplier(updatedSupplier);
+
+
+        if(success){
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Supplier updated successfully!"
+            );
+
+            dispose();
+
+        }else{
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Failed to update supplier."
+            );
+        }
     }
 
-    public static void main(String[] args) {
-        editSupplier dialog = new editSupplier();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
 }

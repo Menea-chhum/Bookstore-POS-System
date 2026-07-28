@@ -28,7 +28,6 @@ public class adminDashboard {
     private JButton addBookBtn;
     private JLabel totalTitleLabel;
     private JLabel totalStockLabel;
-    private JLabel totalCategoryLabel;
     private JLabel totalLowStock;
     private JTextField bookSearchField;
     private JComboBox<String> categoryFilterCombo;
@@ -38,9 +37,9 @@ public class adminDashboard {
 
     // Category
     private JPanel categoriesPanel;
+    private JLabel totalCategoryLabel;
     private JPanel categoryTopPanel;
     private JButton addCategoryButton;
-    private JTextField categorySearchField;
     private JPanel categoryGridPanel;
     private category selectedCategory = null;
     private JPanel selectedCard = null;
@@ -63,6 +62,7 @@ public class adminDashboard {
     private JButton updateBookButton;
     private JButton deleteCategoryBtn;
     private JButton updateCategoryBtn;
+    private JTable saleDetailTable;
     private JButton updateButton2;
     private JButton deleteButton2;
 
@@ -98,6 +98,10 @@ public class adminDashboard {
         updateCategoryBtn.addActionListener(e -> openUpdateCategory());
         deleteCategoryBtn.addActionListener(e -> openDeleteCategory());
 
+        addSupplierButton.addActionListener(e-> openAddSupplierForm());
+        updateSupplierBtn.addActionListener(e -> openUpdateSupplierForm());
+        deleteSupplierBtn.addActionListener(e -> openDeleteSupplierForm());
+
         logoutBtn.addActionListener(e -> openLogoutForm());
 
 
@@ -121,14 +125,38 @@ public class adminDashboard {
         });
         categoryFilterCombo.addActionListener(e -> searchBooks());
 
-    }
+        searchSuppliersTextField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchSupplier();
+            }
 
-    private void loadDashboardStatistics() {
-        totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
-        totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
-        totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
-        totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchSupplier();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                searchSupplier();
+            }
+        });
+
     }
+//
+//    private void loadDashboardStatistics() {
+//        totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
+//        totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
+//        totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
+//        totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+//    }
+private void loadDashboardStatistics() {
+
+    // Book tab
+    totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
+    totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
+    totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+
+    // Category tab
+    totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
+}
 
 
     // Load the book table
@@ -640,5 +668,159 @@ private JPanel createCategoryCard(category c) {
         frame.pack();
         frame.setLocationRelativeTo(mainPanel);
         frame.setVisible(true);
+    }
+    private void openUpdateSupplierForm(){
+
+        int row = supplierTable.getSelectedRow();
+
+        if(row == -1){
+
+            JOptionPane.showMessageDialog(
+                    mainPanel,
+                    "Please select a supplier to update."
+            );
+
+            return;
+        }
+
+
+        int supplierId = (int)supplierTable.getValueAt(row,0);
+
+
+        supplierDAO dao = new supplierDAO();
+
+        supplier selectedSupplier =
+                dao.getSupplierById(supplierId);
+
+
+        editSupplier dialog =
+                new editSupplier(selectedSupplier);
+
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainPanel);
+        dialog.setVisible(true);
+
+
+        // refresh table after update
+        loadSupplierTable();
+    }
+    private void openDeleteSupplierForm(){
+
+        int row = supplierTable.getSelectedRow();
+
+
+        if(row == -1){
+
+            JOptionPane.showMessageDialog(
+                    mainPanel,
+                    "Please select a supplier to delete."
+            );
+
+            return;
+        }
+
+
+        int supplierId =
+                (int)supplierTable.getValueAt(row,0);
+
+
+        supplierDAO dao = new supplierDAO();
+
+
+        supplier selectedSupplier =
+                dao.getSupplierById(supplierId);
+
+
+
+        JFrame frame = new JFrame("Delete Supplier");
+
+
+        deleteSupplier form =
+                new deleteSupplier(
+                        selectedSupplier,
+                        () -> {
+
+                            loadSupplierTable();
+
+                        }
+                );
+
+
+        frame.setContentPane(form.getMainPanel());
+
+        frame.setDefaultCloseOperation(
+                JFrame.DISPOSE_ON_CLOSE
+        );
+
+        frame.pack();
+
+        frame.setLocationRelativeTo(mainPanel);
+
+        frame.setVisible(true);
+    }
+    private void openAddSupplierForm(){
+
+        JFrame frame = new JFrame("Add Supplier");
+
+
+        addSupplierForm form =
+                new addSupplierForm(() -> {
+
+                    loadSupplierTable();
+
+                });
+
+
+        frame.setContentPane(form.getMainPanel());
+
+
+        frame.setDefaultCloseOperation(
+                JFrame.DISPOSE_ON_CLOSE
+        );
+
+
+        frame.pack();
+
+        frame.setLocationRelativeTo(mainPanel);
+
+        frame.setVisible(true);
+    }
+    private void searchSupplier() {
+
+        String keyword = searchSuppliersTextField.getText().trim();
+
+        supplierDAO dao = new supplierDAO();
+
+        List<supplier> suppliers;
+
+        if(keyword.isEmpty()){
+
+            suppliers = supplierDAO.getAllSuppliers();
+
+        }else{
+
+            suppliers = dao.searchSuppliers(keyword);
+
+        }
+
+
+        DefaultTableModel model =
+                (DefaultTableModel) supplierTable.getModel();
+
+        model.setRowCount(0); // clear old rows
+
+
+        for(supplier s : suppliers){
+
+            model.addRow(new Object[]{
+                    s.getSupplierId(),
+                    s.getSupplierName(),
+                    s.getContactNumber(),
+                    s.getEmail(),
+                    s.getAddress()
+            });
+
+        }
     }
 }
