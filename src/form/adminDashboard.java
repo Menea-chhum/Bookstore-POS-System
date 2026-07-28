@@ -79,9 +79,55 @@ public class adminDashboard {
         loadBookTable();
         loadSupplierTable();
         loadCategoryFilter();
-//        categoryGridPanel.setLayout(
-//                new GridLayout(0, 5, 10, 10)
-//        );
+        bookSearchField.setText("Search book by title...");
+        bookSearchField.setForeground(Color.GRAY);
+
+        bookSearchField.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            public void focusGained(java.awt.event.FocusEvent e) {
+
+                if (bookSearchField.getText().equals("Search book by title...")) {
+                    bookSearchField.setText("");
+                    bookSearchField.setForeground(Color.BLACK);
+                }
+
+            }
+
+            public void focusLost(java.awt.event.FocusEvent e) {
+
+                if (bookSearchField.getText().isEmpty()) {
+                    bookSearchField.setText("Search book by title...");
+                    bookSearchField.setForeground(Color.GRAY);
+                }
+
+            }
+
+        });
+        searchSuppliersTextField.setText("Search supplier by name...");
+        searchSuppliersTextField.setForeground(Color.GRAY);
+
+        searchSuppliersTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            public void focusGained(java.awt.event.FocusEvent e) {
+
+                if (searchSuppliersTextField.getText().equals("Search supplier by name...")) {
+                    searchSuppliersTextField.setText("");
+                    searchSuppliersTextField.setForeground(Color.BLACK);
+                }
+
+            }
+
+            public void focusLost(java.awt.event.FocusEvent e) {
+
+                if (searchSuppliersTextField.getText().isEmpty()) {
+                    searchSuppliersTextField.setText("Search supplier by name...");
+                    searchSuppliersTextField.setForeground(Color.GRAY);
+                }
+
+            }
+
+        });
+
         categoryGridPanel.setLayout(
                 new FlowLayout(FlowLayout.LEFT, 15, 15)
         );
@@ -103,10 +149,6 @@ public class adminDashboard {
         deleteSupplierBtn.addActionListener(e -> openDeleteSupplierForm());
 
         logoutBtn.addActionListener(e -> openLogoutForm());
-
-
-//        updateButton2.addActionListener(e -> openUpdateCategory());
-
 
         //typing listen
         bookSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
@@ -157,6 +199,18 @@ private void loadDashboardStatistics() {
     // Category tab
     totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
 }
+//private void loadDashboardStatistics() {
+//
+//    int total = categoryDAO.getTotalCategories();
+//
+//    System.out.println("loadDashboardStatistics() called");
+//    System.out.println("Total categories = " + total);
+//
+//    totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
+//    totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
+//    totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+//    totalCategoryLabel.setText(String.valueOf(total));
+//}
 
 
     // Load the book table
@@ -266,9 +320,14 @@ private void openUpdateBookForm() {
     dialog.setLocationRelativeTo(mainPanel);
     dialog.setVisible(true);
 
+////    loadBookTable();
+//    loadDashboardStatistics();
 //    loadBookTable();
+
     loadDashboardStatistics();
     loadBookTable();
+    loadLowStockStatistics();
+    loadLowStockTable();
 }
 
     private void openDeleteBookDialog() {
@@ -382,15 +441,19 @@ private void openUpdateBookForm() {
 
         String keyword = bookSearchField.getText().trim();
 
-        String category =
-                (String) categoryFilterCombo.getSelectedItem();
+        if(keyword.equals("Search book by title...")){
+            keyword = "";
+        }
 
-        List<book> books =
-                bookDAO.searchAndFilterBooks(keyword, category);
+        String category = (String) categoryFilterCombo.getSelectedItem();
+        if (category == null) {
+            return;
+        }
+
+        List<book> books = bookDAO.searchAndFilterBooks(keyword, category);
 
         loadBookTable(books);
     }
-//
 private JPanel createCategoryCard(category c) {
 
     JPanel card = new JPanel();
@@ -790,6 +853,9 @@ private JPanel createCategoryCard(category c) {
 
         String keyword = searchSuppliersTextField.getText().trim();
 
+        if(keyword.equals("Search supplier by name...")){
+            keyword = "";
+        }
         supplierDAO dao = new supplierDAO();
 
         List<supplier> suppliers;

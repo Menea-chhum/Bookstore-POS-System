@@ -50,7 +50,7 @@ public class deleteCategory {
                     "Category deleted successfully."
             );
 
-            refreshCallback.run();
+//            refreshCallback.run();
 
             Window window = SwingUtilities.getWindowAncestor(mainPanel);
 

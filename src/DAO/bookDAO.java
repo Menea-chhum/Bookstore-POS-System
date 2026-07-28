@@ -80,6 +80,63 @@ public class bookDAO {
         return books;
     }
 
+//    public static List<book> searchAndFilterBooks(String keyword, String categoryName) {
+//
+//        List<book> books = new ArrayList<>();
+//
+//        if (categoryName == null) {
+//            categoryName = "All Categories";
+//        }
+//
+//        String sql =
+//                "SELECT b.*, c.category_name, s.supplier_name " +
+//                        "FROM book b " +
+//                        "JOIN category c ON b.category_id = c.category_id " +
+//                        "JOIN supplier s ON b.supplier_id = s.supplier_id " +
+//                        "WHERE (b.title LIKE ? OR b.author LIKE ?) ";
+//
+//        if (categoryName != null && !categoryName.equals("All Categories")) {
+//            sql += " AND c.category_name = ? ";
+//        }
+//
+//        sql += "ORDER BY b.title";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//            ps.setString(1, "%" + keyword + "%");
+//            ps.setString(2, "%" + keyword + "%");
+//
+//            if (categoryName != null && !categoryName.equals("All Categories")) {
+//                sql += " AND c.category_name = ? ";
+//            }
+//
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                book b = new book(
+//                        rs.getInt("book_id"),
+//                        rs.getString("title"),
+//                        rs.getString("author"),
+//                        rs.getDouble("price"),
+//                        rs.getInt("quantity"),
+//                        rs.getInt("category_id"),
+//                        rs.getInt("supplier_id")
+//                );
+//
+//                b.setCategoryName(rs.getString("category_name"));
+//                b.setSupplierName(rs.getString("supplier_name"));
+//
+//                books.add(b);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return books;
+//    }
+
     public static List<book> searchAndFilterBooks(String keyword, String categoryName) {
 
         List<book> books = new ArrayList<>();
@@ -89,9 +146,9 @@ public class bookDAO {
                         "FROM book b " +
                         "JOIN category c ON b.category_id = c.category_id " +
                         "JOIN supplier s ON b.supplier_id = s.supplier_id " +
-                        "WHERE (b.title LIKE ? OR b.author LIKE ?)";
+                        "WHERE (b.title LIKE ? OR b.author LIKE ?) ";
 
-        if (!categoryName.equals("All Categories")) {
+        if (categoryName != null && !categoryName.equals("All Categories")) {
             sql += "AND c.category_name = ? ";
         }
 
@@ -103,7 +160,7 @@ public class bookDAO {
             ps.setString(1, "%" + keyword + "%");
             ps.setString(2, "%" + keyword + "%");
 
-            if (!categoryName.equals("All Categories")) {
+            if (categoryName != null && !categoryName.equals("All Categories")) {
                 ps.setString(3, categoryName);
             }
 
