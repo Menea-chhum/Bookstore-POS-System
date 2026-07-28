@@ -153,6 +153,7 @@
                             </constraints>
                             <properties>
                               <background color="-1773060"/>
+                              <toolTipText value="Search book by title or author"/>
                             </properties>
                             <border type="none"/>
                             <children>
@@ -161,8 +162,13 @@
                                 <properties>
                                   <columns value="120"/>
                                   <foreground color="-8875608"/>
+<<<<<<< HEAD
                                   <preferredSize width="1326" height="32"/>
                                   <text value="Search book by title or author"/>
+=======
+                                  <preferredSize width="1088" height="32"/>
+                                  <text value=""/>
+>>>>>>> 615f38a73a848c131289eed1e54b3d900414a0b6
                                 </properties>
                               </component>
                               <component id="71065" class="javax.swing.JComboBox" binding="categoryFilterCombo">
@@ -171,6 +177,12 @@
                                   <background color="-1"/>
                                   <model/>
                                   <preferredSize width="160" height="32"/>
+                                </properties>
+                              </component>
+                              <component id="c10f3" class="javax.swing.JLabel">
+                                <constraints/>
+                                <properties>
+                                  <text value="Label"/>
                                 </properties>
                               </component>
                             </children>
@@ -324,7 +336,7 @@
                                     </constraints>
                                     <properties>
                                       <font size="22" style="1"/>
-                                      <foreground color="-2987746"/>
+                                      <foreground color="-653556"/>
                                       <text value=""/>
                                     </properties>
                                   </component>
@@ -562,17 +574,82 @@
                       </grid>
                     </children>
                   </grid>
-                  <grid id="f1f02" binding="categoryGridPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="5" vgap="5">
+                  <grid id="5d623" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="10" left="10" bottom="10" right="10"/>
                     <constraints border-constraint="Center"/>
                     <properties>
                       <background color="-1773060"/>
-                      <preferredSize width="2000" height="358"/>
                     </properties>
-                    <border type="empty">
-                      <size top="10" left="10" bottom="10" right="10"/>
-                    </border>
-                    <children/>
+                    <border type="none"/>
+                    <children>
+                      <scrollpane id="ede8b">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <foreground color="-1773060"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <grid id="f1f02" binding="categoryGridPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="5" vgap="5">
+                            <margin top="10" left="10" bottom="10" right="10"/>
+                            <constraints/>
+                            <properties>
+                              <background color="-1773060"/>
+                              <preferredSize width="2000" height="358"/>
+                            </properties>
+                            <border type="empty">
+                              <size top="10" left="10" bottom="10" right="10"/>
+                            </border>
+                            <children/>
+                          </grid>
+                        </children>
+                      </scrollpane>
+                      <grid id="30d2e" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="10" left="10" bottom="10" right="10"/>
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-1773060"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="434d0" class="javax.swing.JButton" binding="deleteButton1" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-653556"/>
+                              <font size="13" style="1"/>
+                              <foreground color="-1"/>
+                              <text value="Delete"/>
+                            </properties>
+                          </component>
+                          <component id="e4167" class="javax.swing.JButton" binding="updateButton1" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-13926447"/>
+                              <font size="13" style="1"/>
+                              <foreground color="-1"/>
+                              <text value="Update"/>
+                            </properties>
+                          </component>
+                          <hspacer id="ced99">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <hspacer id="edb73">
+                            <constraints>
+                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                        </children>
+                      </grid>
+                    </children>
                   </grid>
                 </children>
               </grid>
@@ -670,7 +747,7 @@
                       </component>
                     </children>
                   </grid>
-                  <grid id="73955" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="73955" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="10" left="10" bottom="10" right="10"/>
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -682,7 +759,7 @@
                     <children>
                       <scrollpane id="708d6">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <background color="-1"/>
@@ -695,6 +772,28 @@
                           </component>
                         </children>
                       </scrollpane>
+                      <component id="1d6a6" class="javax.swing.JButton" binding="updateButton2" default-binding="true">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-13926447"/>
+                          <font size="13" style="1"/>
+                          <foreground color="-1"/>
+                          <text value="Update"/>
+                        </properties>
+                      </component>
+                      <component id="f7a1d" class="javax.swing.JButton" binding="deleteButton2" default-binding="true">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-653556"/>
+                          <font size="13" style="1"/>
+                          <foreground color="-1"/>
+                          <text value="Delete"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <vspacer id="af5b1">
@@ -817,18 +916,22 @@
                           <grid id="a206" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="10" left="10" bottom="10" right="10"/>
                             <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="-1" height="30"/>
+                              </grid>
                             </constraints>
                             <properties>
                               <background color="-1"/>
                             </properties>
                             <border type="line"/>
                             <children>
-                              <component id="e28c1" class="javax.swing.JLabel" binding="lowStockItemLabel">
+                              <component id="e28c1" class="javax.swing.JLabel" binding="totalLowStockItemLabel">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <font size="22" style="1"/>
+                                  <foreground color="-653556"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -839,7 +942,7 @@
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Low Stock Items"/>
+                              <text value="Total Low Stock Items"/>
                             </properties>
                           </component>
                         </children>
@@ -857,18 +960,22 @@
                           <grid id="17849" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="10" left="10" bottom="10" right="10"/>
                             <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="-1" height="30"/>
+                              </grid>
                             </constraints>
                             <properties>
                               <background color="-1"/>
                             </properties>
                             <border type="line"/>
                             <children>
-                              <component id="50db" class="javax.swing.JLabel" binding="lowestStockTitleLabel">
+                              <component id="50db" class="javax.swing.JLabel" binding="outOfStockLabel">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <font size="22" style="1"/>
+                                  <foreground color="-16777216"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -879,7 +986,7 @@
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Lowest Stock Title"/>
+                              <text value="Out Of Stock"/>
                             </properties>
                           </component>
                         </children>
@@ -897,18 +1004,22 @@
                           <grid id="7b044" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="10" left="10" bottom="10" right="10"/>
                             <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="-1" height="30"/>
+                              </grid>
                             </constraints>
                             <properties>
                               <background color="-1"/>
                             </properties>
                             <border type="line"/>
                             <children>
-                              <component id="78785" class="javax.swing.JLabel" binding="alertMessageLabel">
+                              <component id="78785" class="javax.swing.JLabel" binding="criticalBookLabel">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <font size="22" style="1"/>
+                                  <foreground color="-16777216"/>
                                   <text value=""/>
                                 </properties>
                               </component>
@@ -919,7 +1030,7 @@
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Alert Message "/>
+                              <text value="Book with Lowest Stock"/>
                             </properties>
                           </component>
                         </children>
