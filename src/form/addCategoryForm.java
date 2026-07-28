@@ -1,3 +1,5 @@
+package form;
+
 import javax.swing.*;
 
 public class addCategoryForm {
