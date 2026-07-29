@@ -13,8 +13,8 @@ import java.util.Date;
  * NewSale Class - Handles the Point of Sale operations
  */
 public class NewSale {
-    // Root Panel - MUST match exactly what's in the .form file
-    private JPanel MainPanel;  // Capital M - matches the .form file
+    // Root Panel
+    private JPanel MainPanel;
 
     // Panel Components
     private JPanel HeaderPanel;
@@ -35,12 +35,14 @@ public class NewSale {
     private JLabel storeNameLabel;
     private JLabel Username;
     private JLabel accountLabel;
+    private JLabel totalBooksLabel;
+    private JLabel totalAmountLabel;
 
     // Buttons
     private JButton LogoutBtn;
     private JButton searchBtn;
-    private JButton button1;
-    private JButton button2;
+    private JButton button1; // Add To Cart
+    private JButton button2; // Remove Selected
     private JButton Confirm;
     private JButton cancelBtn;
 
@@ -61,32 +63,18 @@ public class NewSale {
     // Flag to prevent search on initialization
     private boolean isInitializing = true;
 
-    // Labels for total display
-    private JLabel totalBooksLabel;
-    private JLabel totalAmountLabel;
-
-    /**
-     * Constructor for NewSale
-     */
     public NewSale() {
         this(null);
     }
 
-    /**
-     * Constructor with staff parameter
-     * @param staff Logged-in staff member
-     */
     public NewSale(staff staff) {
         this.currentStaff = staff;
 
-        System.out.println("NewSale constructor received staff: " + (staff != null ? staff.getFull_name() : "null"));
-        if (staff != null) {
-            System.out.println("Staff ID: " + staff.getStaffId());
-            System.out.println("Staff Role: " + staff.getRole());
-        }
+        System.out.println("=== NEW SALE CONSTRUCTOR ===");
+        System.out.println("Received staff: " + (staff != null ? staff.getFull_name() : "NULL"));
 
+        createUI();
         initializeTables();
-        findTotalLabels();
         setupListeners();
         loadCategories();
         loadBooks();
@@ -95,69 +83,282 @@ public class NewSale {
         isInitializing = false;
     }
 
-    /**
-     * Get the main panel for this form
-     * @return MainPanel
-     */
     public JPanel getMainPanel() {
         return MainPanel;
     }
 
-    /**
-     * Set the current logged-in staff
-     * @param staff Staff object
-     */
-    public void setCurrentStaff(staff staff) {
-        this.currentStaff = staff;
-        displayUsername();
+    private void createUI() {
+        MainPanel = new JPanel(new BorderLayout());
+        MainPanel.setBackground(new Color(240, 240, 240));
+
+        // ===== HEADER PANEL =====
+        JPanel headerPanel = createHeaderPanel();
+        MainPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // ===== CENTER PANEL =====
+        JPanel centerPanel = new JPanel(new GridLayout(1, 2, 15, 15));
+        centerPanel.setBackground(new Color(240, 240, 240));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // Left Panel - Books
+        JPanel bookPanel = createBookPanel();
+        centerPanel.add(bookPanel);
+
+        // Right Panel - Cart
+        JPanel cartPanel = createCartPanel();
+        centerPanel.add(cartPanel);
+
+        MainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        // ===== BOTTOM PANEL =====
+        JPanel bottomPanel = createBottomPanel();
+        MainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * Display username in the header
-     */
-    private void displayUsername() {
-        if (currentStaff != null && Username != null) {
-            Username.setText(currentStaff.getFull_name());
-        }
-        if (currentStaff != null && accountLabel != null) {
-            accountLabel.setText(currentStaff.getRole());
-        }
+    private JPanel createHeaderPanel() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(30, 30, 50));
+        headerPanel.setPreferredSize(new Dimension(0, 70));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        // Left: Logo
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        leftPanel.setOpaque(false);
+
+        logoLabel = new JLabel("📚");
+        logoLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        logoLabel.setForeground(Color.WHITE);
+
+        storeNameLabel = new JLabel("Inkwell Books");
+        storeNameLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        storeNameLabel.setForeground(Color.WHITE);
+
+        leftPanel.add(logoLabel);
+        leftPanel.add(storeNameLabel);
+
+        // Right: User info and logout
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        rightPanel.setOpaque(false);
+
+        JPanel userPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+        userPanel.setOpaque(false);
+
+        Username = new JLabel("User");
+        Username.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        Username.setForeground(Color.WHITE);
+
+        accountLabel = new JLabel("Role");
+        accountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        accountLabel.setForeground(new Color(180, 180, 200));
+
+        userPanel.add(Username);
+        userPanel.add(accountLabel);
+
+        LogoutBtn = new JButton("Logout");
+        LogoutBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        LogoutBtn.setBackground(new Color(200, 50, 50));
+        LogoutBtn.setForeground(Color.WHITE);
+        LogoutBtn.setFocusPainted(false);
+        LogoutBtn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        LogoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        rightPanel.add(userPanel);
+        rightPanel.add(LogoutBtn);
+
+        headerPanel.add(leftPanel, BorderLayout.WEST);
+        headerPanel.add(rightPanel, BorderLayout.EAST);
+
+        return headerPanel;
     }
 
-    /**
-     * Find total labels in the form
-     */
-    private void findTotalLabels() {
-        // Search for labels in CartPanel
-        if (CartPanel != null) {
-            findLabelsInContainer(CartPanel);
-        }
+    private JPanel createBookPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+
+        // Title
+        JLabel titleLabel = new JLabel("📖 Books");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(30, 30, 50));
+
+        // Search Panel
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        searchPanel.setBackground(Color.WHITE);
+
+        textField1 = new JTextField(15);
+        textField1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        textField1.setPreferredSize(new Dimension(150, 30));
+        textField1.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(180, 180, 180)),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+
+        comboBox1 = new JComboBox<>();
+        comboBox1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        comboBox1.setPreferredSize(new Dimension(120, 30));
+
+        searchBtn = new JButton("Search");
+        searchBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        searchBtn.setBackground(new Color(0, 120, 215));
+        searchBtn.setForeground(Color.WHITE);
+        searchBtn.setFocusPainted(false);
+        searchBtn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        searchBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        searchPanel.add(new JLabel("Search:"));
+        searchPanel.add(textField1);
+        searchPanel.add(new JLabel("Category:"));
+        searchPanel.add(comboBox1);
+        searchPanel.add(searchBtn);
+
+        // Quantity Panel
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        quantityPanel.setBackground(Color.WHITE);
+
+        spinner1 = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
+        spinner1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        spinner1.setPreferredSize(new Dimension(60, 30));
+
+        button1 = new JButton("Add to Cart");
+        button1.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button1.setBackground(new Color(46, 204, 113));
+        button1.setForeground(Color.WHITE);
+        button1.setFocusPainted(false);
+        button1.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        button1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        quantityPanel.add(new JLabel("Quantity:"));
+        quantityPanel.add(spinner1);
+        quantityPanel.add(button1);
+
+        // Table
+        table1 = new JTable();
+        table1.setRowHeight(30);
+        table1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        table1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table1.getTableHeader().setBackground(new Color(52, 73, 94));
+        table1.getTableHeader().setForeground(Color.WHITE);
+        table1.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table1.setSelectionBackground(new Color(173, 216, 230));
+
+        JScrollPane scrollPane = new JScrollPane(table1);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+
+        // Assemble
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        topPanel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(searchPanel, BorderLayout.CENTER);
+        topPanel.add(quantityPanel, BorderLayout.SOUTH);
+
+        panel.add(topPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        return panel;
     }
 
-    /**
-     * Recursively find labels in container
-     */
-    private void findLabelsInContainer(Container container) {
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof JLabel) {
-                JLabel label = (JLabel) comp;
-                String text = label.getText();
-                if (text != null) {
-                    if (text.contains("Total Books")) {
-                        totalBooksLabel = label;
-                    } else if (text.contains("Total Amount")) {
-                        totalAmountLabel = label;
-                    }
-                }
-            } else if (comp instanceof Container) {
-                findLabelsInContainer((Container) comp);
-            }
-        }
+    private JPanel createCartPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+
+        // Title
+        JLabel titleLabel = new JLabel("🛒 Shopping Cart");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(30, 30, 50));
+
+        // Table
+        table2 = new JTable();
+        table2.setRowHeight(30);
+        table2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        table2.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table2.getTableHeader().setBackground(new Color(52, 73, 94));
+        table2.getTableHeader().setForeground(Color.WHITE);
+        table2.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table2.setSelectionBackground(new Color(173, 216, 230));
+
+        JScrollPane scrollPane = new JScrollPane(table2);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+
+        // Remove Button
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        buttonPanel.setBackground(Color.WHITE);
+
+        button2 = new JButton("Remove Selected");
+        button2.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button2.setBackground(new Color(200, 50, 50));
+        button2.setForeground(Color.WHITE);
+        button2.setFocusPainted(false);
+        button2.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        button2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        buttonPanel.add(button2);
+
+        // Total Panel
+        JPanel totalPanel = new JPanel(new GridLayout(2, 1, 0, 5));
+        totalPanel.setBackground(new Color(245, 245, 250));
+        totalPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+
+        totalBooksLabel = new JLabel("Total Books: 0");
+        totalBooksLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        totalBooksLabel.setForeground(new Color(30, 30, 50));
+
+        totalAmountLabel = new JLabel("Total Amount: $0.00");
+        totalAmountLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        totalAmountLabel.setForeground(new Color(0, 120, 215));
+
+        totalPanel.add(totalBooksLabel);
+        totalPanel.add(totalAmountLabel);
+
+        // Assemble
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        topPanel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        panel.add(topPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(totalPanel, BorderLayout.SOUTH);
+
+        return panel;
     }
 
-    /**
-     * Initialize table models and configure tables
-     */
+    private JPanel createBottomPanel() {
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        bottomPanel.setBackground(new Color(240, 240, 240));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 15, 0));
+
+        cancelBtn = new JButton("Cancel");
+        cancelBtn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        cancelBtn.setBackground(new Color(150, 150, 150));
+        cancelBtn.setForeground(Color.WHITE);
+        cancelBtn.setFocusPainted(false);
+        cancelBtn.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        cancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        Confirm = new JButton("Confirm Sale");
+        Confirm.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        Confirm.setBackground(new Color(46, 204, 113));
+        Confirm.setForeground(Color.WHITE);
+        Confirm.setFocusPainted(false);
+        Confirm.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        Confirm.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        bottomPanel.add(cancelBtn);
+        bottomPanel.add(Confirm);
+
+        return bottomPanel;
+    }
+
     private void initializeTables() {
         // Book List Table (table1)
         String[] productColumns = {"Book ID", "Title", "Author", "Price", "Stock"};
@@ -179,23 +380,15 @@ public class NewSale {
         };
         table2.setModel(cartModel);
 
-        // Add listener to update totals when cart changes
         cartModel.addTableModelListener(e -> updateTotalDisplay());
     }
 
-    /**
-     * Setup the quantity spinner with default value and range
-     */
     private void setupSpinner() {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, 999, 1);
         spinner1.setModel(spinnerModel);
     }
 
-    /**
-     * Setup action listeners for all buttons
-     */
     private void setupListeners() {
-        // Search button listener
         if (searchBtn != null) {
             searchBtn.addActionListener(e -> {
                 if (!isInitializing) {
@@ -204,7 +397,6 @@ public class NewSale {
             });
         }
 
-        // Enter key press on search field
         if (textField1 != null) {
             textField1.addActionListener(e -> {
                 if (!isInitializing) {
@@ -213,7 +405,6 @@ public class NewSale {
             });
         }
 
-        // Category filter combo box listener
         if (comboBox1 != null) {
             comboBox1.addActionListener(e -> {
                 if (!isInitializing) {
@@ -222,32 +413,26 @@ public class NewSale {
             });
         }
 
-        // Add To Cart button
         if (button1 != null) {
             button1.addActionListener(e -> addToCart());
         }
 
-        // Remove Selected button
         if (button2 != null) {
             button2.addActionListener(e -> removeFromCart());
         }
 
-        // Confirm Sale button
         if (Confirm != null) {
             Confirm.addActionListener(e -> confirmSale());
         }
 
-        // Cancel button
         if (cancelBtn != null) {
             cancelBtn.addActionListener(e -> cancelSale());
         }
 
-        // Logout button
         if (LogoutBtn != null) {
             LogoutBtn.addActionListener(e -> logout());
         }
 
-        // Double click on book table to add to cart
         if (table1 != null) {
             table1.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -259,9 +444,15 @@ public class NewSale {
         }
     }
 
-    /**
-     * Load all categories from database into comboBox1
-     */
+    private void displayUsername() {
+        if (currentStaff != null && Username != null) {
+            Username.setText(currentStaff.getFull_name());
+        }
+        if (currentStaff != null && accountLabel != null) {
+            accountLabel.setText(currentStaff.getRole());
+        }
+    }
+
     private void loadCategories() {
         if (comboBox1 == null) return;
 
@@ -286,9 +477,6 @@ public class NewSale {
         }
     }
 
-    /**
-     * Load all books from database into table1
-     */
     private void loadBooks() {
         String query = "SELECT b.book_id, b.title, b.author, b.price, b.quantity " +
                 "FROM book b " +
@@ -319,14 +507,10 @@ public class NewSale {
         }
     }
 
-    /**
-     * Search books by ID or Title
-     */
     private void searchBooks() {
         String searchText = textField1.getText().trim();
         String selectedCategory = (String) comboBox1.getSelectedItem();
 
-        // If search text is empty and category is "All Categories", just load all books
         if (searchText.isEmpty() && (selectedCategory == null || selectedCategory.equals("All Categories"))) {
             loadBooks();
             return;
@@ -339,9 +523,7 @@ public class NewSale {
                         "WHERE 1=1 "
         );
 
-        // Add search condition
         if (!searchText.isEmpty()) {
-            // Check if search text is a number (book ID)
             try {
                 Integer.parseInt(searchText);
                 query.append("AND b.book_id = ? ");
@@ -350,7 +532,6 @@ public class NewSale {
             }
         }
 
-        // Add category filter
         if (selectedCategory != null && !selectedCategory.equals("All Categories")) {
             query.append("AND c.category_name = ? ");
         }
@@ -362,7 +543,6 @@ public class NewSale {
 
             int paramIndex = 1;
 
-            // Set search parameters
             if (!searchText.isEmpty()) {
                 try {
                     int bookId = Integer.parseInt(searchText);
@@ -372,7 +552,6 @@ public class NewSale {
                 }
             }
 
-            // Set category parameter
             if (selectedCategory != null && !selectedCategory.equals("All Categories")) {
                 pstmt.setString(paramIndex++, selectedCategory);
             }
@@ -407,20 +586,15 @@ public class NewSale {
         }
     }
 
-    /**
-     * Filter books by selected category
-     */
     private void filterByCategory() {
         String selectedCategory = (String) comboBox1.getSelectedItem();
         String searchText = textField1.getText().trim();
 
-        // If search text is not empty, use searchBooks which handles both
         if (!searchText.isEmpty()) {
             searchBooks();
             return;
         }
 
-        // If "All Categories" is selected, load all books
         if (selectedCategory == null || selectedCategory.equals("All Categories")) {
             loadBooks();
             return;
@@ -460,9 +634,6 @@ public class NewSale {
         }
     }
 
-    /**
-     * Add selected book to shopping cart
-     */
     private void addToCart() {
         int selectedRow = table1.getSelectedRow();
         if (selectedRow == -1) {
@@ -473,16 +644,12 @@ public class NewSale {
             return;
         }
 
-        // Get book details from table1
         int bookId = (int) table1.getValueAt(selectedRow, 0);
         String title = (String) table1.getValueAt(selectedRow, 1);
         double price = (double) table1.getValueAt(selectedRow, 3);
         int stock = (int) table1.getValueAt(selectedRow, 4);
-
-        // Get quantity from spinner
         int quantity = (int) spinner1.getValue();
 
-        // Check stock availability
         if (quantity > stock) {
             JOptionPane.showMessageDialog(MainPanel,
                     "Insufficient stock! Available: " + stock,
@@ -491,11 +658,9 @@ public class NewSale {
             return;
         }
 
-        // Check if book already exists in cart
         boolean found = false;
         for (int i = 0; i < cartModel.getRowCount(); i++) {
             if ((int) cartModel.getValueAt(i, 0) == bookId) {
-                // Update existing cart item
                 int currentQty = (int) cartModel.getValueAt(i, 3);
                 int newQty = currentQty + quantity;
 
@@ -516,25 +681,16 @@ public class NewSale {
         }
 
         if (!found) {
-            // Add new item to cart
             double subtotal = price * quantity;
             Object[] row = {bookId, title, price, quantity, subtotal};
             cartModel.addRow(row);
         }
 
-        // Update total display
         updateTotalDisplay();
-
-        // Clear selection
         table1.clearSelection();
-
-        // Reset spinner to 1
         spinner1.setValue(1);
     }
 
-    /**
-     * Remove selected item from shopping cart
-     */
     private void removeFromCart() {
         int selectedRow = table2.getSelectedRow();
         if (selectedRow == -1) {
@@ -556,9 +712,6 @@ public class NewSale {
         }
     }
 
-    /**
-     * Update total display in labels
-     */
     private void updateTotalDisplay() {
         double total = 0.0;
         int totalBooks = 0;
@@ -568,7 +721,6 @@ public class NewSale {
             totalBooks += (int) cartModel.getValueAt(i, 3);
         }
 
-        // Update the labels if found
         if (totalBooksLabel != null) {
             totalBooksLabel.setText("Total Books: " + totalBooks);
         }
@@ -576,27 +728,12 @@ public class NewSale {
         if (totalAmountLabel != null) {
             totalAmountLabel.setText(String.format("Total Amount: $%.2f", total));
         }
-
-        // Fallback: Search for labels again if not found
-        if (totalBooksLabel == null || totalAmountLabel == null) {
-            findTotalLabels();
-            if (totalBooksLabel != null) {
-                totalBooksLabel.setText("Total Books: " + totalBooks);
-            }
-            if (totalAmountLabel != null) {
-                totalAmountLabel.setText(String.format("Total Amount: $%.2f", total));
-            }
-        }
     }
 
-    /**
-     * Confirm and complete the sale transaction
-     */
     private void confirmSale() {
-        // Debug output
-        System.out.println("Confirm Sale called. Staff: " + (currentStaff != null ? currentStaff.getFull_name() : "null"));
+        System.out.println("=== CONFIRM SALE ===");
+        System.out.println("Staff: " + (currentStaff != null ? currentStaff.getFull_name() : "NULL"));
 
-        // Check if cart is empty
         if (cartModel.getRowCount() == 0) {
             JOptionPane.showMessageDialog(MainPanel,
                     "Shopping cart is empty. Add books before confirming sale.",
@@ -605,7 +742,6 @@ public class NewSale {
             return;
         }
 
-        // Check if staff is logged in
         if (currentStaff == null) {
             JOptionPane.showMessageDialog(MainPanel,
                     "No staff logged in. Please login again.",
@@ -614,7 +750,6 @@ public class NewSale {
             return;
         }
 
-        // Confirm sale
         double total = calculateTotalAmount();
         int confirm = JOptionPane.showConfirmDialog(MainPanel,
                 "Confirm sale with total amount: $" + String.format("%.2f", total) + "?",
@@ -630,7 +765,6 @@ public class NewSale {
             con = DBConnection.getConnection();
             con.setAutoCommit(false);
 
-            // 1. Insert into sale table
             String saleQuery = "INSERT INTO sale (staff_id, sale_date) VALUES (?, ?)";
             int saleId = -1;
 
@@ -650,7 +784,6 @@ public class NewSale {
                 throw new SQLException("Failed to generate sale ID");
             }
 
-            // 2. Insert sale details and update stock
             String detailQuery = "INSERT INTO sale_detail (sale_id, book_id, quantity_sold, unit_price) VALUES (?, ?, ?, ?)";
             String updateStockQuery = "UPDATE book SET quantity = quantity - ? WHERE book_id = ?";
 
@@ -662,28 +795,23 @@ public class NewSale {
                     int quantity = (int) cartModel.getValueAt(i, 3);
                     double price = (double) cartModel.getValueAt(i, 2);
 
-                    // Insert sale detail
                     detailPstmt.setInt(1, saleId);
                     detailPstmt.setInt(2, bookId);
                     detailPstmt.setInt(3, quantity);
                     detailPstmt.setDouble(4, price);
                     detailPstmt.addBatch();
 
-                    // Update stock
                     stockPstmt.setInt(1, quantity);
                     stockPstmt.setInt(2, bookId);
                     stockPstmt.addBatch();
                 }
 
-                // Execute all batch operations
                 detailPstmt.executeBatch();
                 stockPstmt.executeBatch();
             }
 
-            // Commit transaction
             con.commit();
 
-            // Show success message
             JOptionPane.showMessageDialog(MainPanel,
                     "Sale completed successfully!\n" +
                             "Sale ID: " + saleId +
@@ -691,7 +819,6 @@ public class NewSale {
                     "Sale Complete",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Clear cart and refresh
             clearCart();
             loadBooks();
 
@@ -720,10 +847,6 @@ public class NewSale {
         }
     }
 
-    /**
-     * Calculate total amount from cart
-     * @return total amount
-     */
     private double calculateTotalAmount() {
         double total = 0.0;
         for (int i = 0; i < cartModel.getRowCount(); i++) {
@@ -732,9 +855,6 @@ public class NewSale {
         return total;
     }
 
-    /**
-     * Cancel current sale - clear cart and refresh
-     */
     private void cancelSale() {
         int confirm = JOptionPane.showConfirmDialog(MainPanel,
                 "Are you sure you want to cancel the current sale? All cart items will be removed.",
@@ -750,17 +870,11 @@ public class NewSale {
         }
     }
 
-    /**
-     * Clear shopping cart
-     */
     private void clearCart() {
         cartModel.setRowCount(0);
         updateTotalDisplay();
     }
 
-    /**
-     * Logout user and return to login screen
-     */
     private void logout() {
         int confirm = JOptionPane.showConfirmDialog(MainPanel,
                 "Are you sure you want to logout?",
@@ -768,15 +882,12 @@ public class NewSale {
                 JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            // Get the parent window
             Window parentWindow = SwingUtilities.getWindowAncestor(MainPanel);
 
-            // Close the dashboard window
             if (parentWindow != null) {
                 parentWindow.dispose();
             }
 
-            // Open login window
             SwingUtilities.invokeLater(() -> {
                 try {
                     JFrame loginFrame = new JFrame("Bookstore POS - Login");
