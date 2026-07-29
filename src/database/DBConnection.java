@@ -8,7 +8,7 @@ public class DBConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/bookstore_inventory_management";
     private static final String USER = "root";
-    private static final String PASSWORD = "tA9$Xf2@Qw8!Zd3P";
+    private static final String PASSWORD = "Menea@17Tulip";
 
     public static Connection getConnection() {
 
