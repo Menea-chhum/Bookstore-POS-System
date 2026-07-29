@@ -907,7 +907,21 @@ private JPanel createCategoryCard(category c) {
                                 "Date",
                                 "Cashier"
                         },0
-                );
+                ); saleDetailTable.setModel(model);
+        saleDetailTable.setRowHeight(35);
+        saleDetailTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        saleDetailTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Title
+        saleDetailTable.getColumnModel().getColumn(2).setPreferredWidth(180); // Author
+        saleDetailTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // Price
+        saleDetailTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Quantity
+        saleDetailTable.getTableHeader().setFont(
+                new Font("Arial", Font.BOLD, 14)
+        );
+
+        saleDetailTable.getTableHeader().setPreferredSize(
+                new Dimension(0,35)
+        );
+
 
 
         saleDetailTable.setModel(model);
