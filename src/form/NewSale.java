@@ -15,12 +15,35 @@ import java.util.Date;
 public class NewSale {
     // Root Panel
     private JPanel MainPanel;
+    private JPanel HeaderPanel;
+    private JPanel left;
+    private JPanel right;
+    private JPanel header;
+    private JPanel content;
+    private JPanel CenterPanel;
+    private JPanel BookPanel;
+    private JPanel usernamePanel;
+    private JTextField textField1;
+    private JComboBox comboBox1;
+    private JPanel bottom;
+    private JSpinner spinner1;
+    private JButton button1;
+    private JTable table1;
+    private JPanel CartPanel;
+    private JButton button2;
+    private JButton button3;
+    private JTable table2;
+    private JPanel buttomPanel;
+    private JButton button4;
+    private JButton button5;
 
     // Components
     private JLabel Username;
     private JLabel accountLabel;
     private JLabel totalBooksLabel;
     private JLabel totalAmountLabel;
+    private JLabel logoLabel;
+    private JLabel storeNameLabel;
 
     private JButton LogoutBtn;
     private JButton searchBtn;
@@ -849,7 +872,7 @@ public class NewSale {
         if (confirm == JOptionPane.YES_OPTION) {
             Window parentWindow = SwingUtilities.getWindowAncestor(MainPanel);
 
-            
+
             if (parentWindow != null) {
                 parentWindow.dispose();
             }
