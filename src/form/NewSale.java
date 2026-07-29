@@ -849,6 +849,7 @@ public class NewSale {
         if (confirm == JOptionPane.YES_OPTION) {
             Window parentWindow = SwingUtilities.getWindowAncestor(MainPanel);
 
+            
             if (parentWindow != null) {
                 parentWindow.dispose();
             }
