@@ -48,16 +48,6 @@ public class bookDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-//                book b = new book(
-//                        rs.getInt("book_id"),
-//                        rs.getString("title"),
-//                        rs.getString("author"),
-//                        rs.getDouble("price"),
-//                        rs.getInt("quantity"),
-//                        rs.getInt("category_id"),
-//                        rs.getInt("supplier_id")
-//                );
-//                books.add(b);
                 book b = new book(
                         rs.getInt("book_id"),
                         rs.getString("title"),

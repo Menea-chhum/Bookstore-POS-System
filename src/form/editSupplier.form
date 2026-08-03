@@ -143,7 +143,7 @@
         </constraints>
         <properties>
           <font size="22" style="1"/>
-          <text value="EDIT SUPPLIER"/>
+          <text value="UPDATE SUPPLIER"/>
         </properties>
       </component>
     </children>

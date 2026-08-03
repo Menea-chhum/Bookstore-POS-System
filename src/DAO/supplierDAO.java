@@ -198,7 +198,7 @@ public class supplierDAO {
     }
 
     // Get total number of suppliers
-    public int getTotalSuppliers() {
+    public static int getTotalSuppliers() {
         String sql = "SELECT COUNT(*) FROM supplier";
 
         try (Connection conn = DBConnection.getConnection();
@@ -233,4 +233,5 @@ public class supplierDAO {
 
         return 0;
     }
+
 }

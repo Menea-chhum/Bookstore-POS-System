@@ -66,6 +66,11 @@ public class adminDashboard {
     private JButton deleteCategoryBtn;
     private JButton updateCategoryBtn;
     private JTable saleDetailTable;
+    private JLabel totalBooks;
+    private JLabel totalCategories;
+    private JLabel totalSuppliers;
+    private JLabel totalLowstockBooks;
+    private JLabel totalOutOfStock;
     private JButton updateButton2;
     private JButton deleteButton2;
 
@@ -188,36 +193,34 @@ public class adminDashboard {
         loadSaleDetailTable();
 
     }
-//
-//    private void loadDashboardStatistics() {
-//        totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
-//        totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
-//        totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
-//        totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
-//    }
-private void loadDashboardStatistics() {
 
-    // Book tab
-    totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
-    totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
-    totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+    private void loadDashboardStatistics() {
 
-    // Category tab
-    totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
-}
+        // ===== Book Tab =====
+        totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
+        totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
+        totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+
+        // ===== Category Tab =====
+        totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
+
+        // ===== Dashboard Tab =====
+        totalBooks.setText(String.valueOf(bookDAO.getTotalBooks()));
+        totalCategories.setText(String.valueOf(categoryDAO.getTotalCategories()));
+        totalSuppliers.setText(String.valueOf(supplierDAO.getTotalSuppliers()));
+        totalLowstockBooks.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
+        totalOutOfStock.setText(String.valueOf(bookDAO.getOutOfStockBooks()));
+    }
 //private void loadDashboardStatistics() {
 //
-//    int total = categoryDAO.getTotalCategories();
-//
-//    System.out.println("loadDashboardStatistics() called");
-//    System.out.println("Total categories = " + total);
-//
+//    // Book tab
 //    totalTitleLabel.setText(String.valueOf(bookDAO.getTotalBooks()));
 //    totalStockLabel.setText(String.valueOf(bookDAO.getTotalStock()));
 //    totalLowStock.setText(String.valueOf(bookDAO.getLowStockBooks().size()));
-//    totalCategoryLabel.setText(String.valueOf(total));
+//
+//    // Category tab
+//    totalCategoryLabel.setText(String.valueOf(categoryDAO.getTotalCategories()));
 //}
-
 
     // Load the book table
     private void loadBookTable(List<book> books) {
@@ -326,10 +329,6 @@ private void openUpdateBookForm() {
     dialog.setLocationRelativeTo(mainPanel);
     dialog.setVisible(true);
 
-////    loadBookTable();
-//    loadDashboardStatistics();
-//    loadBookTable();
-
     loadDashboardStatistics();
     loadBookTable();
     loadLowStockStatistics();
@@ -405,11 +404,6 @@ private void openUpdateBookForm() {
 
         List<supplier> suppliers = supplierDAO.getAllSuppliers();
         for (supplier s : suppliers) {
-//            model.addRow(new Object[]{
-//                    b.getBookId(), b.getTitle(), b.getAuthor(),
-//                    b.getPrice(), b.getStockQuantity(),
-//                    b.getCategoryId(), b.getSupplierId(), "Edit"
-//            });
             model.addRow(new Object[]{
                     s.getSupplierId(),
                     s.getSupplierName(),
